@@ -27,10 +27,10 @@ Line ~90
 ```
 
 in: 
-Page/Resources/views/admin/create-fields.blade.php 	
+Page/Resources/views/admin/partials/create-fields.blade.php 	
 Line ~19
 
-Page/Resources/views/admin/edit-fields.blade.php 	
+Page/Resources/views/admin/partials/edit-fields.blade.php 	
 Line ~24
 
 above <div class="box-group" id="accordion">
