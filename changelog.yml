@@ -1,0 +1,5 @@
+url: https://github.com/stone-lab/Dynamicfield
+versions:
+    "0.8.0":
+        added:
+            - Initial setup

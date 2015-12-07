@@ -1,0 +1,208 @@
+.form-group .table {
+	background:none;
+}
+.form-group .table .table {
+	background:none;
+}
+.repeater-fields .form-title .table{
+	background:#fff !important;
+}
+#location_infor{
+	border: 1px solid #eee;
+	padding:10px;
+}
+.field_infor{
+	margin:0;
+}
+.field-meta .row-options{
+	visibility: hidden;
+}
+.group-content{
+	padding-left:0;
+}
+.another-field .field-meta:hover .row-options{
+	visibility: visible;
+}
+.form-title .field_form_mask{
+	display:none;
+}
+
+.table-field{
+	margin:0;
+	width:100%;
+	
+}
+.table-field th {
+	padding:10px;
+}
+.table-field .field-label a {
+	color:#333;
+}
+.form-open .table-field .field-label a,.form-open .table-field .field-action a{
+	color:#fff;
+}
+.btn-add-field{
+	margin:15px 0 0;
+}
+table td.label-txt{
+	background: #f9f9f9;
+	border-right:1px solid #e1e1e1;
+}
+.form-open .field-meta{
+	background: #3595bc linear-gradient(to bottom, #46afdb, #3199c5) repeat scroll 0 0 !important;
+   /*  border: 1px solid #268fbb; */
+    box-shadow: 0 1px 0 0 #5fc8f4 inset;
+    color: #fff;
+    position: relative;
+    text-shadow: 0 1px 0 #268fbb;
+}
+.repeater-fields .form-title .field-meta{
+	background: none;
+	 box-shadow: none;
+	color: #333;
+	text-shadow: none;
+}
+.repeater-fields .form-title .table-field .field-label a,.repeater-fields .form-title  .table-field .field-action a{
+	color:#333;
+}
+.field_form{
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color #e1e1e1 #e1e1e1;
+    border-image: none;
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+}
+.table_footer{
+	
+	background: #f0f0f0 none repeat scroll 0 0;
+    border: 1px solid #c7d7e2;
+    margin-top: -1px;
+    padding: 8px;
+	text-align:right;
+}
+
+.table-field thead{
+	background: #eaf2fa none repeat scroll 0 0;
+	 border: 1px solid #c7d7e2;
+    margin-top: -1px;
+    padding: 8px;
+	text-align:right;
+}
+.table_footer .btn-add-field{
+	margin:0;
+}
+.form-title .field-meta{
+   -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color #dfdfdf #f0f0f0;
+    border-image: none;
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+}
+.circle{
+	background: transparent none repeat scroll 0 0;
+    border: 1px solid #bbbbbb;
+    border-radius: 12px;
+    display: block;
+    font-size: 12px;
+    height: 22px;
+    line-height: 20px;
+    margin: 2px 0 0 6px;
+    text-align: center;
+    text-indent: 0;
+    width: 22px;
+}
+/* repeater template field   */
+.table-repeater {
+    border-collapse: separate;
+	width:100%;
+	
+}
+.table-repeater th {
+	background:#F1F1F1;
+}
+.table-repeater  td{
+	vertical-align:top;
+	padding:7px;
+	border:1px solid #c1c1c1;
+	border-right:0px;
+	border-top:0px;
+	
+}
+.table-repeater  .repeater-group th {
+	border:0px;
+	padding:10px 0px;
+	background:none;
+}
+.table-repeater tbody
+{
+
+    border: 1px solid #008000;
+}
+.table-repeater  th {
+	border:1px solid #c1c1c1;
+	padding:5px 7px;
+	border-right:0px;
+}
+.table-repeater tbody .test{
+    background: red;
+
+}.table-repeater tbody .test td {
+
+    background: red;
+ }
+.table-repeater  th.caption {
+	
+}
+.table-repeater tfoot td{
+	text-align:right;	
+	border-right:1px solid #c1c1c1;
+}
+.table-repeater th.last, .table-repeater td.last {
+	border-right:1px solid #c1c1c1;
+	vertical-align:middle;
+	
+	
+}
+.table-repeater th.last {
+	width:38px;
+	display:block;
+}
+.table-repeater  tr.ui-sortable-helper {
+    border-top:1px solid #c1c1c1;
+}
+.table-repeater  tr.ui-sortable-helper td {
+    background: #f1f1f1 ;
+}
+.table-repeater  .ui-state-highlight {
+    background: #F0F0F0 ;
+    border-bottom:1px solid #c1c1c1;
+    border-right:  1px solid #c1c1c1;
+}
+.table-repeater .ui-state-highlight td {
+    border: 0px;
+}
+.table-repeater .ui-state-highlight td:last-child {
+   border-right:  1px solid #c1c1c1 ;
+}
+.table-repeater .ui-state-highlight td:first-child {
+   border-left:  1px solid #c1c1c1 ;
+}
+
+.repeater-template {
+	display:none;
+}
+
+.btn-delete{
+	border: 1px solid #c1c1c1;
+    border-radius: 50%;
+    display: block;
+    text-align: center;
+    width: 22px;
+
+}
