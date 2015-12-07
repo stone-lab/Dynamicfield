@@ -138,8 +138,8 @@ class EloquentGroupRepository extends EloquentBaseRepository implements GroupRep
     private function getFieldData($field)
     {
         $type            = $field["type"];
-        $opitionClass    =  "Modules\Dynamicfield\Utility\Enum\Options\\"  . ucfirst($type) ;
-        $options    = $opitionClass::getKeys();
+        $optionClass    =  "Modules\Dynamicfield\Utility\Enum\Options\\"  . ucfirst($type) ;
+        $options    = $optionClass::getKeys();
 
         $json =  array();
         foreach ($options as $k=>$v) {
