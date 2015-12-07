@@ -16,7 +16,7 @@ Line ~17
 	@if($dynamicFieldCss)
 		{!! $dynamicFieldCss !!}
 	@endif
-```php
+```
 
 add to @section('scripts')
 Line ~90
@@ -24,7 +24,7 @@ Line ~90
 	@if($dynamicFieldCss)
 		{!! $dynamicFieldCss !!}
 	@endif
-```php
+```
 
 in: 
 Page/Resources/views/admin/create-fields.blade.php 	Line ~19
@@ -36,7 +36,7 @@ above <div class="box-group" id="accordion">
     @if($dynamicfield)
         {!! $dynamicfield->render($lang) !!}
     @endif
-```php
+```
 
 ## Usage
 
