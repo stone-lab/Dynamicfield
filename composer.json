@@ -1,5 +1,5 @@
 {
-	"name": "stonelab/Dynamicfield",
+	"name": "stonelab/dynamicfield",
 	"description": "",
     "type": "asgard-module",
     "require": {
