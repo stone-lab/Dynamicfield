@@ -21,9 +21,9 @@ Line ~17
 add to @section('scripts')
 Line ~90
 ```php
-	@if($dynamicFieldCss)
-		{!! $dynamicFieldCss !!}
-	@endif
+    @if($dynamicFieldScript)
+        {!! $dynamicFieldScript !!}
+    @endif
 ```
 
 in: 
