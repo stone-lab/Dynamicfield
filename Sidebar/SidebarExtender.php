@@ -29,7 +29,7 @@ class SidebarExtender implements \Maatwebsite\Sidebar\SidebarExtender
      */
     public function extendWith(Menu $menu)
     {
-        $menu->group(trans('janzz::menus.sidebar.components'), function (Group $group) {
+        $menu->group(trans('core::sidebar.content'), function (Group $group) {
             $group->item(trans('dynamicfield::dynamicfield.title.dynamicfield'), function (Item $item) {
                 $item->icon('fa fa-cubes');
                 $item->weight(50);
