@@ -9,6 +9,12 @@ var dynamicEditorConfig = {
     coreStyles_bold: { element : 'b', overrides : 'strong' }
 };
 $( document ).ready(function() {
+		//TODO remove it as soon it is defined globally
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('[name=_token]').val()
+		}
+	});
 	// ajax when change select type
 	$(document).on('change', '.field-type', function(){
 		// vars
