@@ -5,9 +5,9 @@ use Log;
 
 class Text extends FieldBase
 {
-    public function __construct($field_info, $type_id, $locale)
+    public function __construct($field_info, $entityId, $locale)
     {
-        parent:: __construct($field_info, $type_id, $locale);
+        parent:: __construct($field_info, $entityId, $locale);
     }
 
     public function valid()

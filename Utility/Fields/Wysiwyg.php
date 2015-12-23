@@ -5,9 +5,9 @@ use Log;
 
 class Wysiwyg extends FieldBase
 {
-    public function __construct($field_info, $type_id, $locale)
+    public function __construct($field_info, $entityId, $locale)
     {
-        parent:: __construct($field_info, $type_id, $locale);
+        parent:: __construct($field_info, $entityId, $locale);
     }
 
     public function valid()
@@ -65,6 +65,10 @@ class Wysiwyg extends FieldBase
         $html                 = sprintf($this->_html_item_template, $html);
 
         return $html ;
+    }
+
+    public function bindEditorScript()
+    {
     }
 
     public function getErrorMessage()

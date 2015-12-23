@@ -6,6 +6,11 @@ use Illuminate\Routing\Router;
   $router->bind('group', function ($id) {
             return app('Modules\Dynamicfield\Repositories\GroupRepository')->find($id);
         });
+		
+$router->bind('page', function ($id) {
+    return app(\Modules\Page\Repositories\PageRepository::class)->find($id);
+});
+
 $router->group(['prefix' =>'/dynamicfield'], function (Router $router) {
 
         $router->resource('group', 'GroupFieldsController', ['except' => ['show'], 'names' => [
@@ -22,4 +27,6 @@ $router->group(['prefix' =>'/dynamicfield'], function (Router $router) {
     post('group/edit/renderOption', ['as' => 'admin.dynamicfield.group.renderOption', 'uses' => 'GroupFieldsController@renderOption']);
     post('group/edit/renderRepeaterOption', ['as' => 'admin.dynamicfield.group.renderRepeaterOption', 'uses' => 'GroupFieldsController@renderRepeaterOption']);
     post('group/renderControl', ['as' => 'admin.dynamicfield.group.renderControl', 'uses' => 'GroupFieldsController@ajaxRender']);
+    
+	post('media/link', ['as' => 'admin.dynamicfield.media.linkMedia', 'uses' => 'MediaController@linkMedia']);
 });

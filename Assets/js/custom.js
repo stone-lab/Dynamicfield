@@ -2,20 +2,24 @@ var dynamicEditorConfig = {
     toolbar:
         [
             [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ],
-            [ 'Image','Flash','Table','Smiley','SpecialChar','PageBreak','Iframe' ] ,
-            [ 'NumberedList','BulletedList','Blockquote','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ],
+            [ 'Link','Unlink','Image','Flash','Table','PageBreak','Iframe' ] ,
+            [ 'NumberedList','BulletedList','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ],
             [ 'Maximize'],
+			['Format'],['Source']
         ],
-    coreStyles_bold: { element : 'b', overrides : 'strong' }
+    coreStyles_bold: { element : 'b', overrides : 'strong' },
+	format_tags: 'p;h1;h2;h3;h4;h5;h6;pre'
+
 };
 $( document ).ready(function() {
-		//TODO remove it as soon it is defined globally
+	// ajax when change select type
+	//TODO remove it as soon it is defined globally
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('[name=_token]').val()
 		}
 	});
-	// ajax when change select type
+
 	$(document).on('change', '.field-type', function(){
 		// vars
 		var select = $(this),
@@ -247,7 +251,7 @@ function addRepeaterField(Id) {
 	var $template = $(_repeateId);
 	
 	_new_index++;
-	var $_new =  $template.clone(true).removeClass("repeater-template").attr('id','');
+	var $_new =  $template.clone(true).removeClass("repeater-template").addClass("another-field").attr('id','');
 	 
 	// update names
 	var new_id  = "-" + _new_index;
@@ -267,6 +271,13 @@ function addRepeaterField(Id) {
 			}
 				
 		});
+	$_new.find('.add-media').each(function()
+	{
+		var onclick = $(this).attr('onclick') ;
+		
+		$(this).attr('onclick', onclick.replace("clone", new_id) );
+		
+	});		
 	$(_repeater_index).val(_new_index);
 	$template.parent().append( $_new );
 	
@@ -310,6 +321,7 @@ function update_order_numbers(panel){
 
 
 	if(is_panel_parent ){
+			/* console.log("Step_1"+panel) */
 			panel.each(function(){
 				$(this).find('.another-field').not('.field_option_repeater .another-field').each(function(i){
 					var index = i+1 ;
@@ -321,6 +333,7 @@ function update_order_numbers(panel){
 				});
 			});
 	}else{// update field of repeater field
+		/* console.log(panel) */
 		panel.each(function(){
 			$(this).find('.another-field').each(function(i){
 				var index = i+1 ;
@@ -486,8 +499,8 @@ function deleteRepeaterField(Id,o){
 
 
 function bindSortableForRepeater(repeaterId){
-
-     var sortable = "#" + repeaterId + "  tbody";
+	
+    var sortable = "#" + repeaterId + "  tbody";
     var tempData = [] ;
     $(sortable).sortable({
         placeholder: "ui-state-highlight",
@@ -514,7 +527,7 @@ function bindSortableForRepeater(repeaterId){
             ui.item.find('.dynamic-editor').each(function(){
                 var id = $(this).attr('id');
                 var value =  tempData[id];
-                console.log(value);
+                /* console.log(value); */
                 if($.inArray( id, CKEDITOR.instances )){
                   var editor =   CKEDITOR.replace(id, dynamicEditorConfig);
                     editor.setData(value);
@@ -526,9 +539,8 @@ function bindSortableForRepeater(repeaterId){
 
 
 function initDynamicEditor(){
-
+	/* console.log("initDynamicEditor"); */
     for(name in CKEDITOR.instances) {
-            console.log(name);
             CKEDITOR.instances[name].destroy(true);
 
         }

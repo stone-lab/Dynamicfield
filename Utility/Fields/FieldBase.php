@@ -23,12 +23,12 @@ class FieldBase
     protected $_html_id_format        = "%s_%s_value";
     protected $_html_item_template = "<div class='form-group'>%s</div>";
 
-    public function __construct($field_info, $pageId, $locale)
+    public function __construct($field_info, $entityId, $locale)
     {
         $this->_field    = $field_info;
         $option_data    = (array) json_decode($field_info->data) ;
         $this->_options    = $option_data;
-        $this->_entity_id    = $pageId;
+        $this->_entity_id    = $entityId;
         $this->_locale    = $locale;
         $this->_field_id    = $this->_field->id;
     }

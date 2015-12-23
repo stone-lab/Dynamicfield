@@ -9,9 +9,9 @@ class File extends FieldBase
 {
     private $file;
 
-    public function __construct($field_info, $type_id, $locale)
+    public function __construct($field_info, $entityId, $locale)
     {
-        parent:: __construct($field_info, $type_id, $locale);
+        parent:: __construct($field_info, $entityId, $locale);
     }
     public function init($_default= null)
     {

@@ -35,6 +35,7 @@ class CreateDynamicfieldTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('entity_id')->unsigned();
+            $table->integer('entity_type')->unsigned();
             $table->integer('field_id')->unsigned();
             $table->foreign('field_id')->references('id')->on('dynamicfield__fields')->onDelete('cascade');
             $table->timestamps();

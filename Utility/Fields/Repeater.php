@@ -137,6 +137,9 @@ class Repeater extends FieldBase
             case 'file':
                 $field_control = new File($field, $this->_entity_id, $this->_locale);
                 break;
+            case 'image':
+                $field_control = new Image($field, $this->_entity_id, $this->_locale);
+                break;
         }
         $field_control->setRepeaterId($this->_field_id);
         $field_control->setTranslateId($translateId);
@@ -270,7 +273,8 @@ class Repeater extends FieldBase
         $input_index = FormFacade::hidden($repeater_index_id, 0, array('id'=>$repeater_index_id));
         $input_delete = FormFacade::hidden($repeater_delete_name, "", array('id'=>$repeater_delete_id));
         $html            .= $input_index . $input_delete;
-        $html            .=  sprintf("<script>bindSortableForRepeater('%s');</script>", $repeater_table_id);
+
+        $html            .=  sprintf("<script>$( document ).ready(function() {bindSortableForRepeater('%s');});</script>", $repeater_table_id);
 
         return $html;
     }

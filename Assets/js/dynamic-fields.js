@@ -39,10 +39,18 @@ var DynamicFields = {
 								var id = DynamicFields.advanceFieldId + lang;
 								var htmlContent  = eval("data.html." + lang);
 								$(id).html(htmlContent);
+								/********************************/
+									var editor_class = id  + ' .form-group .ckeditor' ;
+									$(editor_class).each(function(i){
+											 var name = $(this).attr('name');
+											 CKEDITOR.replace(name);
+									});
+								/********************************/
 							}
+							
 					}
 				});
-		
+			
 	    },
 	   
 	    

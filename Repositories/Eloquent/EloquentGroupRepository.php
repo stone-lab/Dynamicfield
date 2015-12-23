@@ -48,12 +48,18 @@ class EloquentGroupRepository extends EloquentBaseRepository implements GroupRep
 
         DB::beginTransaction();
         try {
+            \Debugbar::info('start try');
+            \Debugbar::info(count($itemsDeleted));
             if (!empty($itemsDeleted)) {
                 $this->deleteFields($itemsDeleted);
             }
+            \Debugbar::info('after delete fields try');
             if (!empty($itemsRepeaterDeleted)) {
                 $this->deleteRepeaterField($itemsRepeaterDeleted);
             }
+            \Debugbar::info('after delete reptear fields');
+            // save group model
+            \Debugbar::info($this->model);
             $groupModel            = $this->model->firstOrNew(['id' => $groupId]);
             $groupModel->name        = $group["name"];
             $groupModel->template    = $group["template"];
@@ -65,6 +71,8 @@ class EloquentGroupRepository extends EloquentBaseRepository implements GroupRep
             DB::commit();
             $bResult    = true;
         } catch (\Exception $ex) {
+            \Debugbar::info('Exception');
+            \Debugbar::info($ex);
             DB::rollback();
         }
 
@@ -126,6 +134,8 @@ class EloquentGroupRepository extends EloquentBaseRepository implements GroupRep
     private function deleteFields($strList)
     {
         $items = explode(",", $strList);
+        \Debugbar::info($items);
+        \Debugbar::info('go to detroy');
 
         return Field::destroy($items);
     }
@@ -138,8 +148,8 @@ class EloquentGroupRepository extends EloquentBaseRepository implements GroupRep
     private function getFieldData($field)
     {
         $type            = $field["type"];
-        $optionClass    =  "Modules\Dynamicfield\Utility\Enum\Options\\"  . ucfirst($type) ;
-        $options    = $optionClass::getKeys();
+        $opitionClass    =  "Modules\Dynamicfield\Utility\Enum\Options\\"  . ucfirst($type) ;
+        $options    = $opitionClass::getKeys();
 
         $json =  array();
         foreach ($options as $k=>$v) {

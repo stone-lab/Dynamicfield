@@ -3,6 +3,7 @@
 use Modules\Dynamicfield\Entities\Field;
 use Modules\Dynamicfield\Entities\Group;
 use Modules\Dynamicfield\Utility\Fields\File;
+use Modules\Dynamicfield\Utility\Fields\Image;
 use Modules\Dynamicfield\Utility\Fields\Number;
 use Modules\Dynamicfield\Utility\Fields\Repeater;
 use Modules\Dynamicfield\Utility\Fields\Text;
@@ -74,6 +75,9 @@ class Entity
                         break;
                     case 'file':
                         $fieldControl = new File($field, $this->_page_id, $this->_locale);
+                        break;
+                    case 'image':
+                        $fieldControl = new Image($field, $this->_page_id, $this->_locale);
                         break;
                     case 'repeater':
 
