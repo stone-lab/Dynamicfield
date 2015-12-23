@@ -1,0 +1,7 @@
+# .scrutinizer.yml
+tools:
+    php_code_sniffer:
+        config:
+            standard: "PSR2" # Other Values: PSR2, PEAR, Zend, WordPress, Drupal, TYPO3CMS
+    php_cs_fixer:
+        config: { level: psr2 }
