@@ -13,7 +13,10 @@ return [
         'renderRepeaterOption',
         'ajaxRender',
     ],
-	'dynamicfield.media' => [
+    'dynamicfield.media' => [
         'linkMedia',
+    ],
+    'dynamicfield.page' => [
+        'duplicate',
     ],
 ];
