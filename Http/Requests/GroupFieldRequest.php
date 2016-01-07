@@ -1,4 +1,6 @@
-<?php namespace Modules\Dynamicfield\Http\Requests;
+<?php
+
+namespace Modules\Dynamicfield\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +13,6 @@ class GroupFieldRequest extends FormRequest
     {
         return [
             'group.name' => 'required',
-            'group.template' => 'required',
         ];
     }
 
@@ -29,8 +30,7 @@ class GroupFieldRequest extends FormRequest
     public function messages()
     {
         return [
-            'group.name.required' => trans('dynamicfield.:messages.group.name required'),
-            'group.template.required' => trans('dynamicfield.:messages.group.template required'),
+            'group.name.required' => trans('dynamicfield::messages.group.name required'),
         ];
     }
 }

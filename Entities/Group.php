@@ -1,29 +1,34 @@
-<?php namespace Modules\Dynamicfield\Entities;
+<?php
 
-use Dimsav\Translatable\Translatable;
+namespace Modules\Dynamicfield\Entities;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    /* use Translatable; */
+    protected $table = 'dynamicfield__groups';
+    protected $fillable = ['name'];
 
-    protected $table    = 'dynamicfield__groups';
-    /* public $translatedAttributes = []; */
-    protected $fillable = ['name','template'];
-
-    public function Fields()
+    public function fields()
     {
         return $this->hasMany('Modules\Dynamicfield\Entities\Field', 'group_id', 'id');
     }
+
+    public function rules()
+    {
+        return $this->hasMany('Modules\Dynamicfield\Entities\Rule', 'group_id', 'id');
+    }
+
     public function getListFields()
     {
-        $data = $this->Fields()->orderBy('order')->get();
-
+        $data = $this->fields()->orderBy('order')->get();
         return $data;
     }
+
+
     public function scopeFindByTemplate($query, $template)
     {
-        $groups =    $query->where('template', $template)->get();
+        $groups = $query->where('template', $template)->get();
 
         return $groups;
     }

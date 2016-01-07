@@ -12,6 +12,7 @@ return [
         'renderOption',
         'renderRepeaterOption',
         'ajaxRender',
+        'renderLocationDrop',
     ],
     'dynamicfield.media' => [
         'linkMedia',

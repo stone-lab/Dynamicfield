@@ -1,4 +1,6 @@
-<?php namespace Modules\Dynamicfield\Repositories;
+<?php
+
+namespace Modules\Dynamicfield\Repositories;
 
 use Modules\Core\Repositories\BaseRepository;
 

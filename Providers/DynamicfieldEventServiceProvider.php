@@ -12,18 +12,10 @@ class DynamicfieldEventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-            'Modules\Page\Events\PageWasCreated' => [
-                    'Modules\Dynamicfield\Listener\AddNewProcess',
-            ],
-            'Modules\Page\Events\PageWasUpdated' => [
-                    'Modules\Dynamicfield\Listener\UpdateProcess',
-            ],
-            'Modules\Page\Events\PageWasReplicated' => [
-                    'Modules\Dynamicfield\Listener\ReplicateProcess',
-            ],
+    protected $subscribe = [
+        'Modules\Dynamicfield\Listener\AddNewProcess',
+        'Modules\Dynamicfield\Listener\UpdateProcess',
     ];
-
     /**
      * Register any other events for your application.
      *

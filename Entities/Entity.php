@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Entity extends Model
 {
     protected $table = 'dynamicfield__entities';
-    protected $fillable = ['entity_id', 'field_id'];
+    protected $fillable = ['entity_id', 'field_id','entity_type'];
 
-    public function Fields()
+    public function fields()
     {
         return $this->hasMany('Modules\Dynamicfield\Entities\FieldTranslation', 'entity_field_id', 'id');
     }
     // relation with RepeaterFieldTranslation
-    public function Repeaters()
+    public function repeaters()
     {
         return $this->hasMany('Modules\Dynamicfield\Entities\RepeaterTranslation', 'entity_repeater_id', 'id');
     }
@@ -25,8 +25,7 @@ class Entity extends Model
     }
     public function getFieldByLocale($locale = 'en')
     {
-        $object = null;
-        $fields = $this->Fields()->where('locale', $locale)->get();
+        $fields = $this->fields()->where('locale', $locale)->get();
         if ($fields->count()) {
             $object = $fields[0];
         } else {
@@ -38,7 +37,7 @@ class Entity extends Model
 
     public function getRepeatersByLocale($locale)
     {
-        $repeaters = $this->Repeaters()
+        $repeaters = $this->repeaters()
                             ->where('locale', $locale)
                             ->orderBy('order')
                             ->get();
@@ -57,10 +56,11 @@ class Entity extends Model
         return $object;
     }
 
-    public function scopeGetEntity($query, $entity_id, $field_id)
+    public function scopeGetEntity($query, $entityId, $entityType, $fieldId)
     {
-        $entities = $query->where('entity_id', $entity_id)
-                        ->where('field_id', $field_id)->get();
+        $entities = $query->where('entity_id', $entityId)
+                        ->where('entity_type', $entityType)
+                        ->where('field_id', $fieldId)->get();
         if ($entities->count()) {
             $object = $entities[0];
         } else {
@@ -70,9 +70,9 @@ class Entity extends Model
         return $object;
     }
 
-    public function scopeGetFieldsByEntity($query, $entity_id)
+    public function scopeGetFieldsByEntity($query, $entityId)
     {
-        $entities = $query->where('entity_id', $entity_id)->get();
+        $entities = $query->where('entity_id', $entityId)->get();
 
         return $entities;
     }

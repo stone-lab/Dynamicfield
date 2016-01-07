@@ -1,40 +1,41 @@
-<?php namespace Modules\Dynamicfield\Entities;
+<?php
 
-use Dimsav\Translatable\Translatable;
+namespace Modules\Dynamicfield\Entities;
+
 use Illuminate\Database\Eloquent\Model;
 use Modules\Media\Support\Traits\MediaRelation;
 
 class Field extends Model
 {
-    /* use Translatable; */
     use MediaRelation;
 
     protected $table = 'dynamicfield__fields';
-    /* public $translatedAttributes = []; */
-    protected $fillable = ['group_id','data','type','name','order'];
+    protected $fillable = ['group_id', 'data', 'type', 'name', 'order'];
 
-    public function Group()
+    public function group()
     {
         return $this->belongsTo('Modules\Dynamicfield\Entities\Group', 'group_id', 'id');
     }
 
-    public function Fields()
+    public function fields()
     {
         return $this->hasMany('Modules\Dynamicfield\Entities\RepeaterField', 'field_id', 'id');
     }
     public function getListFields()
     {
-        $data = $this->Fields()->orderBy('order')->get();
+        $data = $this->fields()->orderBy('order')->get();
 
         return $data;
     }
     public function getOptions()
     {
-        $optionClass    =  "Modules\Dynamicfield\Utility\Enum\Options\\"  . ucfirst($this->type) ;
-
-        $arrDefault    = $optionClass::getList();
-        $jsonData        = (array) json_decode($this->data) ;
-        $result = array_merge($arrDefault, $jsonData);
+        $result = array();
+        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($this->type);
+        if (class_exists($optionClass)) {
+            $arrDefault = $optionClass::getList();
+            $jsonData = (array) json_decode($this->data);
+            $result = array_merge($arrDefault, $jsonData);
+        }
 
         return $result;
     }

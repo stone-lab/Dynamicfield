@@ -3,14 +3,13 @@
 namespace Modules\Dynamicfield\Utility\Fields;
 
 use Collective\Html\FormFacade;
-use Log;
 
 class Image extends FieldBase
 {
 
-    public function __construct($field_info, $type_id, $locale)
+    public function __construct($fieldInfo, $entityId, $locale)
     {
-        parent:: __construct($field_info, $type_id, $locale);
+        parent:: __construct($fieldInfo, $entityId, $locale);
     }
     public function valid()
     {
@@ -18,7 +17,7 @@ class Image extends FieldBase
         if ($this->getOption('required') == 'true') {
             $value = $this->getValue();
             if (empty($value)) {
-                $this->_isValid = false;
+                $this->isValid = false;
             } else {
                 $bResult = true;
             }
@@ -34,26 +33,21 @@ class Image extends FieldBase
         $id = $this->getHtmlId();
         $name = $this->getHtmlName();
         $label = $this->getLabel();
-        $css_class = 'file';
+        $cssClass = 'file';
         $attrs['id'] = $id;
        
         if ($this->getOption('required') == 'true') {
-            $css_class .= ' required';
+            $cssClass .= ' required';
         }
-        $value = $this->_value;
-        if ($this->_value) {
-            $imgPath = $this->getDisplayValue();
-            $img = sprintf("<img src='%s' width='90' height='90' />", $imgPath);
-        }
-        $attrs['class'] = $css_class;
-
+        $value = $this->value;
+        $attrs['class'] = $cssClass;
         $html = '';
         if (!empty($label)) {
             $html .= FormFacade::label($label);
         }
         $html            .= view('dynamicfield::admin.dynamicfield.media-link', compact('name', 'id', 'value'))->render();
 
-        $html = sprintf($this->_html_item_template, $html);
+        $html = sprintf($this->htmlItemTemplate, $html);
 
         return $html;
     }
@@ -67,7 +61,7 @@ class Image extends FieldBase
 
     public function getDisplayValue()
     {
-        $value = $this->_value;
+        $value = $this->value;
 
         return $value;
     }

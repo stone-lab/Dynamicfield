@@ -1,28 +1,24 @@
-<?php namespace Modules\Dynamicfield\Entities;
+<?php
 
-use Dimsav\Translatable\Translatable;
+namespace Modules\Dynamicfield\Entities;
+
 use Illuminate\Database\Eloquent\Model;
 
 class RepeaterField extends Model
 {
-    /* use Translatable; */
-
     protected $table = 'dynamicfield__repeater_fields';
-    /* public $translatedAttributes = []; */
-    protected $fillable = ['field_id','data','type','name','order'];
+    protected $fillable = ['field_id', 'data', 'type', 'name', 'order'];
 
-    public function Group()
+    public function group()
     {
         return $this->belongsTo('Modules\Dynamicfield\Entities\Field', 'field_id', 'id');
     }
 
     public function getOptions()
     {
-        $opitionClass    =  "Modules\Dynamicfield\Utility\Enum\Options\\"  . ucfirst($this->type) ;
-
-        $arrDefault    = $opitionClass::getList();
-
-        $jsonData        = (array) json_decode($this->data) ;
+        $opitionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($this->type);
+        $arrDefault = $opitionClass::getList();
+        $jsonData = (array) json_decode($this->data);
         $result = array_merge($arrDefault, $jsonData);
 
         return $result;

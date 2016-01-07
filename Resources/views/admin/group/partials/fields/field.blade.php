@@ -1,8 +1,8 @@
+<?php $options = $field->getOptions(); ?>
 <?php 
-    $options = $field->getOptions();
+    if (count($options)):
 ?>
 <div class="field-meta">
-	
 	<table class="table-field table">
 		<tr>
 			<td class="field-order col-md-3">
@@ -14,10 +14,8 @@
 				<div class="row-options">
 					<a class="btn-toggle" href="javascript:;">Edit</a>
 					|
-					<?php 
-                        $field_id = $field->id;
-                    ?>
-					<a class="btn-delete-field" href="javascript:;" data-id={{ $field_id }} delete-list-id="fields-deleted" >Delete</a>
+					<?php $fieldId = $field->id; ?>
+					<a class="btn-delete-field" href="javascript:;" data-id={{ $fieldId }} delete-list-id="fields-deleted" >Delete</a>
 				</div>
 			</td>
 			<td class="field-name col-md-3">
@@ -28,9 +26,7 @@
 			</td>
 		</tr>
 	</table>
-	
 </div>
-
 <div class="field_form_mask">
 	<div class="field_form">
 		{!! Form::hidden("field[$index][id]", $field->id, ['class' => 'form-control slugify field-label']) !!}
@@ -69,35 +65,33 @@
 				</td>
 				<td class="col-md-9">
 					<?php 
-                        $select_name =sprintf("field[%s][type]", $index);
+                        $selectName = sprintf('field[%s][type]', $index);
                         $arrFields = Modules\Dynamicfield\Utility\Enum\Fields::getList();
-
                     ?>
-					
 					{!! 
-						Form::select($select_name, $arrFields,$field->type, array('class' => 'field-type form-control'));
+						Form::select($selectName, $arrFields,$field->type, array('class' => 'field-type form-control'));
 					!!}
 				</td>
 			</tr>
 			<tr>
 				<?php 
-                    $required_name =sprintf("field[%s][required]", $index);
+                    $requiredName = sprintf('field[%s][required]', $index);
                 ?>
 				<td class="col-md-3 label-txt">
 					{!! Form::label("field[$index][required]", trans('dynamicfield::field.form.required')) !!}
 					<p class="text-muted">{!! trans('dynamicfield::field.description.default.required') !!}</p>
 				</td>
 				<td class="col-md-9">
-					{!! Form::radio($required_name, 'true'); !!}<label>Yes</label>
-					{!! Form::radio($required_name, 'false', true); !!}<label>No</label>
+					{!! Form::radio($requiredName, 'true'); !!}<label>Yes</label>
+					{!! Form::radio($requiredName, 'false', true); !!}<label>No</label>
 				</td>
 			</tr>
 			<?php
-                $prefix_name    = "field[%s]";
-                $strViewPath = 'dynamicfield::admin.group.partials.fields.' . $type ;
-                if ($type=="repeater") {
+                $prefixName = 'field[%s]';
+                $strViewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
+                if ($type == 'repeater') {
                     $fields = $field->getListFields();
-                    $repeater_index = $index;
+                    $repeaterIndex = $index;
                 }
             ?>
 			 @include($strViewPath)
@@ -110,7 +104,5 @@
 		</table>
 		<!-- field_option start - default with option type is text-->
 	</div>
-	<script>
-		
-	</script>
 </div>
+<?php endif; ?>

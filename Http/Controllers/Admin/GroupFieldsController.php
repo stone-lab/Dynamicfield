@@ -3,7 +3,6 @@
 namespace Modules\Dynamicfield\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Laracasts\Flash\Flash;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Dynamicfield\Entities\Group;
@@ -13,21 +12,28 @@ use Modules\Dynamicfield\Utility\DynamicFields;
 use Modules\Page\Repositories\PageRepository;
 use Modules\Page\Entities\Page;
 use Request as BaseRequest;
+use Collective\Html\FormFacade;
+use Modules\Dynamicfield\Utility\Template;
+use Modules\Dynamicfield\Entities\Rule;
+use Log;
 
 class GroupFieldsController extends AdminBaseController
 {
     /**
      * @var GroupRepository
      * @var PageRepository
+     * @var RoleRepository
      */
     private $group;
     private $page;
+    private $template;
 
-    public function __construct(GroupRepository $group, PageRepository $page)
+    public function __construct(GroupRepository $group, PageRepository $page, Template $template)
     {
         parent::__construct();
         $this->group = $group;
         $this->page = $page;
+        $this->template = $template;
     }
 
     /**
@@ -60,11 +66,21 @@ class GroupFieldsController extends AdminBaseController
     public function store(GroupFieldRequest $request)
     {
         $data = $request->all();
-        $data_group = $data['group'];
-        $data_fields = $data['field'];
-        $this->group->saveData($data_group, $data_fields);
-        flash()->success(trans('core::core.messages.resource created', ['name' => trans('dynamicfield::dynamicfield.title.field_group')]));
+        $dataGroup = $data['group'];
+        $dataFields = $data['field'];
+        // reset key of array location
+        $dataLocations     = array_values($data["location"]);
+        $newDataLocations = array_map('array_values', $dataLocations);
 
+        $bResult = $this->group->saveData($dataGroup, $dataFields, $newDataLocations);
+        $groupId = @$data["group"]["id"];
+        $tran_core = 'core::core.messages.resource created';
+        if ($groupId > 0) {
+            $tran_core = 'core::core.messages.resource updated';
+        }
+        if ($bResult) {
+            flash()->success(trans($tran_core, ['name' => trans('dynamicfield::dynamicfield.title.field_group')]));
+        }
         return redirect()->route('admin.dynamicfield.group.index');
     }
 
@@ -75,9 +91,10 @@ class GroupFieldsController extends AdminBaseController
      */
     public function edit(Group $group)
     {
-        $fields = $group->getListFields();
+        $fields     = $group->getListFields();
+        $locations  = Rule::where('group_id', '=', $group->id)->get();
 
-        return view('dynamicfield::admin.group.edit', compact('group', 'fields'));
+        return view('dynamicfield::admin.group.edit', compact('group', 'fields', 'locations'));
     }
 
     /**
@@ -114,14 +131,14 @@ class GroupFieldsController extends AdminBaseController
     {
         $type = $_REQUEST['field_type'];
         $index = $_REQUEST['field_index'];
-        $repeater_index = $index;
+        $repeaterIndex = $index;
 
         $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($type);
         $options = $optionClass::getList();
-        $prefix_name = 'field[%s]';
-        $view_path = 'dynamicfield::admin.group.partials.fields.'.$type;
+        $prefixName = 'field[%s]';
+        $viewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
         $fields = array();
-        $html = view($view_path, compact('index', 'options', 'fields', 'prefix_name', 'repeater_index'));
+        $html = view($viewPath, compact('index', 'options', 'fields', 'prefixName', 'repeaterIndex'));
 
         return response()->json(['html' => $html->render()]);
     }
@@ -133,13 +150,13 @@ class GroupFieldsController extends AdminBaseController
     {
         $type = $_REQUEST['field_type'];
         $index = $_REQUEST['field_index'];
-        $repeater_index = $_REQUEST['repeater_index'];
+        $repeaterIndex = $_REQUEST['repeater_index'];
 
-        $prefix_name = sprintf('field[%s][repeater][%s]', $repeater_index, $index);
+        $prefixName = sprintf('field[%s][repeater][%s]', $repeaterIndex, $index);
         $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($type);
         $options = $optionClass::getList();
-        $view_path = 'dynamicfield::admin.group.partials.fields.'.$type;
-        $html = view($view_path, compact('index', 'options', 'repeater_index', 'prefix_name'));
+        $viewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
+        $html = view($viewPath, compact('index', 'options', 'repeaterIndex', 'prefixName'));
 
         return response()->json(['html' => $html->render()]);
     }
@@ -152,11 +169,16 @@ class GroupFieldsController extends AdminBaseController
         $this->assetPipeline->requireJs('ckeditor.js');
         $request = BaseRequest::all();
         $template = $request['template'];
+        $entityType = $request['entity_type'];
         $id = $request['id'];
-
-        $page = Page::firstOrNew(['id' => $id]);
-        $page->template = $template;
-        $advanceFields = new DynamicFields($page);
+        $entity = new $entityType();
+        if (get_class($entity) == "stdClass") {
+            $entity->id = null;
+        } else {
+            $entity = $entity->firstOrNew(['id' => $id]);
+        }
+        $entity->template = $template;
+        $advanceFields = new DynamicFields($entity);
         $advanceFields->init();
         $locale = array_keys(LaravelLocalization::getSupportedLocales());
         $jsonData = array();
@@ -175,5 +197,30 @@ class GroupFieldsController extends AdminBaseController
         flash(trans('dynamicfield::messages.page.duplicate successful'));
 
         return redirect()->route('admin.page.page.index');
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function renderLocationDrop()
+    {
+        $selected   = $_REQUEST['selected'];
+        $dropName    = $_REQUEST['dropName'];
+        $value      = null;
+        if ($_REQUEST['value'] != "undefined") {
+            $value    = $_REQUEST['value'];
+        }
+        $name       = str_replace("parameter", "value", $dropName);
+        $arrData   = array();
+        switch ($selected) {
+            case "type":
+                $arrData = config('asgard.dynamicfield.config.entity-type');
+                break;
+            case "template":
+                $arrData    = $this->template->getTemplates();
+                break;
+        }
+        $html = FormFacade::select($name, $arrData, $value, ['class' => "form-control"]);
+        return response()->json(['html' => $html]);
     }
 }

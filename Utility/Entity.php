@@ -1,7 +1,9 @@
-<?php namespace Modules\Dynamicfield\Utility;
+<?php
 
-use Modules\Dynamicfield\Entities\Field;
+namespace Modules\Dynamicfield\Utility;
+
 use Modules\Dynamicfield\Entities\Group;
+use Modules\Dynamicfield\Entities\Rule;
 use Modules\Dynamicfield\Utility\Fields\File;
 use Modules\Dynamicfield\Utility\Fields\Image;
 use Modules\Dynamicfield\Utility\Fields\Number;
@@ -12,15 +14,13 @@ use Modules\Dynamicfield\Utility\Fields\Wysiwyg;
 
 class Entity
 {
-    private $_template;
-    private $_field_type;
-    private $_field_controls;
-    private $_page_id;
-    private $_group_value_id;
-    private $_locale;
-    private $_groupFields;
+    private $template;
+    private $entityId;
+    private $locale;
+    private $type;
+    private $groupFields;
     private $fieldValues;
-    private $_html_item_template = "<div class='panel box box-primary'>
+    private $htmlItemTemplate = "<div class='panel box box-primary'>
 										<div class='box-header'>
 											<h4 class='box-title'><a>%s</a></h4>
 										</div>
@@ -29,78 +29,36 @@ class Entity
 										</div>
 									</div>";
 
-    public function __construct($pageId, $template, $locale)
+    public function __construct($entityId, $template, $locale, $type)
     {
-        $this->_template            = $template ;
-        $this->_page_id            = $pageId ;
-        $this->_locale            = $locale ;
+        $this->template = $template;
+        $this->entityId = $entityId;
+        $this->locale = $locale;
+        $this->type = $type;
     }
-    /* Initial data for group fields  */
+
     public function init($default = null)
     {
-        $groups    = Group::FindByTemplate($this->_template);
+        //getGroupByRule
+        $options["type"]     = $this->type;
+        $options["template"] = $this->template;
+        $groups = $this->getGroupByRule($options);
 
-        if ($groups->count()) {
-            foreach ($groups as $group) {
+        if (count($groups)) {
+            foreach ($groups as $groupId) {
+                $group = Group::find($groupId);
                 $this->initGroup($group, $default);
             }
         }
     }
-    //init data per group
-    private function initGroup($group, $default=null)
-    {
-        $group_id        =    $group->id ;
-        $group_name        =    $group->name ;
-        $fields            =    $group->getListFields();
-        $field_data        =    $this->_getFieldPostData($default);
 
-        if ($fields->count()) {
-            $controls["name"] = $group_name ;
-            foreach ($fields as $field) {
-                $fieldValue    = @$field_data['fields'][$field->id];
-                $fieldControl    = null;
-                switch ($field->type) {
-                    case 'text':
-                        $fieldControl = new Text($field, $this->_page_id, $this->_locale);
-
-                        break;
-                    case 'number':
-                        $fieldControl = new Number($field, $this->_page_id, $this->_locale);
-                        break;
-                    case 'textarea':
-                        $fieldControl = new Textarea($field, $this->_page_id, $this->_locale);
-                        break;
-                    case 'wysiwyg':
-                        $fieldControl = new Wysiwyg($field, $this->_page_id, $this->_locale);
-                        break;
-                    case 'file':
-                        $fieldControl = new File($field, $this->_page_id, $this->_locale);
-                        break;
-                    case 'image':
-                        $fieldControl = new Image($field, $this->_page_id, $this->_locale);
-                        break;
-                    case 'repeater':
-
-                        $fieldControl = new Repeater($field, $this->_page_id, $this->_locale);
-                        break;
-                }
-                $fieldControl->init($fieldValue);
-                $controls["fields"][$field->id] = $fieldControl;
-                // assign value of each field to get late on fronend
-                $this->fieldValues[$field->name] = $fieldControl->getDisplayValue();
-            }
-            $this->_groupFields[$group_id] = $controls;
-        }
-    }
-
-    // valid for group field
     public function valid()
     {
-        $isValid  = true;
+        $isValid = true;
 
-        if (count($this->_groupFields)) {
-            foreach ($this->_groupFields as $group) {
-                $fields = $group["fields"] ;
+        if (count($this->groupFields)) {
+            foreach ($this->groupFields as $group) {
+                $fields = $group['fields'];
                 foreach ($fields as $field) {
                     $isValid = $field->valid();
                     if (!$isValid) {
@@ -112,35 +70,34 @@ class Entity
 
         return $isValid;
     }
-    // render for group field
+
     public function render()
     {
-        $html            = "";
+        $html = '';
 
-        if (count($this->_groupFields)) {
-            foreach ($this->_groupFields as $group) {
-                $html_control  = "";
-                $fields = $group["fields"] ;
+        if (count($this->groupFields)) {
+            foreach ($this->groupFields as $group) {
+                $htmlControl = '';
+                $fields = $group['fields'];
 
                 foreach ($fields as $field) {
-                    $html_control .= $field->render();
+                    $htmlControl .= $field->render();
                 }
-                $label = $group["name"];
-                $html .= sprintf($this->_html_item_template, $label, $html_control);
+                $label = $group['name'];
+                $html .= sprintf($this->htmlItemTemplate, $label, $htmlControl);
             }
         }
 
         return $html;
     }
-    // save field data to database ;
+
     public function save()
     {
         $bResult = false;
-        $abort_save = false;
         try {
-            if (count($this->_groupFields)) {
-                foreach ($this->_groupFields as $group) {
-                    $fields = $group["fields"] ;
+            if (count($this->groupFields)) {
+                foreach ($this->groupFields as $group) {
+                    $fields = $group['fields'];
                     foreach ($fields as $field) {
                         $field->save();
                     }
@@ -151,23 +108,102 @@ class Entity
             //exception handling
         }
 
-        return $bResult ;
+        return $bResult;
     }
 
-    //get list field value of group ;
     public function values()
     {
-        return $this->fieldValues ;
+        return $this->fieldValues;
     }
-    // get Field Data
-    private function _getFieldPostData($data)
+    public function getGroupByRule($options)
     {
-        $_arrData = array();
+        $arrResult = array();
+        $rules = Rule::all();
 
-        if (isset($data)) {
-            $_arrData = @$data[$this->_locale];
+        foreach ($rules as $rule) {
+            $params = (array) json_decode($rule->rule);
+            $defaultMatch = true;
+            foreach ($params as $item) {
+                $match = $this->matchRule((array) $item, $options);
+                $defaultMatch = $defaultMatch && $match;
+            }
+            if ($defaultMatch) {
+                $arrResult[$rule->group_id] = $rule->group_id;
+            }
+        }
+        return $arrResult;
+    }
+
+    private function matchRule($rule, $options)
+    {
+        $match      = false;
+        $type       = array_get($rule, "parameter", 'type');
+        $operator   = array_get($rule, "operator", 'equal');
+        $value      = array_get($rule, "value", 'default');
+
+        if ($operator == "equal") {
+            $match = ($value === $options[$type]);
+        } elseif ($operator == "notequal") {
+            $match = ($value !== $options[$type]);
         }
 
-        return $_arrData ;
+        return $match;
+    }
+
+    private function initGroup($group, $default = null)
+    {
+        $groupId = $group->id;
+        $groupName = $group->name;
+        $fields = $group->getListFields();
+        $fieldData = $this->getFieldPostData($default);
+        $controls = array();
+        if ($fields->count()) {
+            $controls['name'] = $groupName;
+            foreach ($fields as $field) {
+                $fieldValue = @$fieldData['fields'][$field->id];
+                $fieldControl = null;
+                switch ($field->type) {
+                    case 'text':
+                        $fieldControl = new Text($field, $this->entityId, $this->locale);
+                        break;
+                    case 'number':
+                        $fieldControl = new Number($field, $this->entityId, $this->locale);
+                        break;
+                    case 'textarea':
+                        $fieldControl = new Textarea($field, $this->entityId, $this->locale);
+                        break;
+                    case 'wysiwyg':
+                        $fieldControl = new Wysiwyg($field, $this->entityId, $this->locale);
+                        break;
+                    case 'file':
+                        $fieldControl = new File($field, $this->entityId, $this->locale);
+                        break;
+                    case 'image':
+                        $fieldControl = new Image($field, $this->entityId, $this->locale);
+                        break;
+                    case 'repeater':
+                        $fieldControl = new Repeater($field, $this->entityId, $this->locale);
+                        break;
+                }
+
+                // assign entity type class to field to use for save data;
+                $fieldControl->setEntityType($this->type);
+                $fieldControl->init($fieldValue);
+                $controls['fields'][$field->id] = $fieldControl;
+                $this->fieldValues[$field->name] = $fieldControl->getDisplayValue();
+            }
+            $this->groupFields[$groupId] = $controls;
+        }
+    }
+
+    private function getFieldPostData($data)
+    {
+        $arrData = array();
+
+        if (isset($data)) {
+            $arrData = @$data[$this->locale];
+        }
+
+        return $arrData;
     }
 }

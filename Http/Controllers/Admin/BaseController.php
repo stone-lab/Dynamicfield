@@ -1,11 +1,13 @@
-<?php namespace Modules\Dynamicfield\Http\Controllers\Admin;
+<?php
+
+namespace Modules\Dynamicfield\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
     /**
-     * get data in database
+     * get data in database.
      *
      * @return Response
      */

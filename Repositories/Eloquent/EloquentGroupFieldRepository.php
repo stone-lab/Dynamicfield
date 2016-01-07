@@ -1,4 +1,6 @@
-<?php namespace Modules\Dynamicfield\Repositories\Eloquent;
+<?php
+
+namespace Modules\Dynamicfield\Repositories\Eloquent;
 
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Dynamicfield\Repositories\GroupFieldRepository;

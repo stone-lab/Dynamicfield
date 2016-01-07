@@ -30,7 +30,6 @@
 .table-field{
 	margin:0;
 	width:100%;
-	
 }
 .table-field th {
 	padding:10px;
@@ -83,7 +82,6 @@ table td.label-txt{
     padding: 8px;
 	text-align:right;
 }
-
 .table-field thead{
 	background: #eaf2fa none repeat scroll 0 0;
 	 border: 1px solid #c7d7e2;
@@ -121,7 +119,6 @@ table td.label-txt{
 .table-repeater {
     border-collapse: separate;
 	width:100%;
-	
 }
 .table-repeater th {
 	background:#F1F1F1;
@@ -141,7 +138,6 @@ table td.label-txt{
 }
 .table-repeater tbody
 {
-
     border: 1px solid #008000;
 }
 .table-repeater  th {
@@ -156,9 +152,6 @@ table td.label-txt{
 
     background: red;
  }
-.table-repeater  th.caption {
-	
-}
 .table-repeater tfoot td{
 	text-align:right;	
 	border-right:1px solid #c1c1c1;
@@ -166,8 +159,6 @@ table td.label-txt{
 .table-repeater th.last, .table-repeater td.last {
 	border-right:1px solid #c1c1c1;
 	vertical-align:middle;
-	
-	
 }
 .table-repeater th.last {
 	width:38px;
@@ -193,16 +184,55 @@ table td.label-txt{
 .table-repeater .ui-state-highlight td:first-child {
    border-left:  1px solid #c1c1c1 ;
 }
-
 .repeater-template {
 	display:none;
 }
-
 .btn-delete{
 	border: 1px solid #c1c1c1;
     border-radius: 50%;
     display: block;
     text-align: center;
     width: 22px;
-
+}
+#location{
+	margin:20px 0 0;
+	background: #fff none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    min-width: 255px;
+}
+#location h3.title{
+	margin:0;
+	padding: 8px;
+}
+.table-location tr td.rule-des{
+	background: #f9f9f9 none repeat scroll 0 0;
+    vertical-align: top;
+    width: 24%;
+}
+.table-rule #location_template{
+	display:none;
+}
+.table-location .location-group .circle{
+	display:inline-block;
+}
+/*********** media button ****************/
+figure.jsThumbnailImageWrapper {
+	position: relative;
+	display: inline-block;
+	background-color: #fff;
+	border: 1px solid #eee;
+	padding: 3px;
+	border-radius: 3px;
+	margin-top: 20px;
+}
+figure.jsThumbnailImageWrapper i.removeIcon {
+	position: absolute;
+	top:-10px;
+	right:-10px;
+	color: #f56954;
+	font-size: 2em;
+	background: white;
+	border-radius: 20px;
+	height: 25px;
 }

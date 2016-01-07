@@ -1,10 +1,10 @@
-<?php namespace Modules\Dynamicfield\Composers;
+<?php
+
+namespace Modules\Dynamicfield\Composers;
 
 use Illuminate\Contracts\View\View;
 use Modules\Dynamicfield\Utility\DynamicFields;
-use Modules\Page\Entities\Page;
 use Request;
-use Route;
 
 class DynamicfieldViewComposer
 {
@@ -13,35 +13,49 @@ class DynamicfieldViewComposer
      */
     public function compose(View $view)
     {
-        $currentRoute = Route::current();
-        $view = $this->_assignDynamicFieldsToPageObject($view);
+        $this->assignDynamicFieldsToPageObject($view);
     }
 
     /**
      * @param $view
+     *
      * @return mixed
      */
-    private function _assignDynamicFieldsToPageObject($view)
+    private function assignDynamicFieldsToPageObject($view)
     {
-        $data = $view->getData();
-
+        $data    = $view->getData();
         //TODO Fix with event
         if (count($data)) {
-            $page = new Page();
+            $arrType = config('asgard.dynamicfield.config.entity-type');
+            $arrType =  array_keys($arrType);
+            $entity  = new \stdClass();
+            $entity->id = null;
+            $entity->template = null;
+            // edit entity
             foreach ($data as $item) {
-                if (is_a($item, 'Modules\Page\Entities\Page')) {
-                    $page = $item;
-                    break;
+                if (is_object($item)) {
+                    $className = get_class($item);
+                    if (in_array($className, $arrType)) {
+                        $entity = $item;
+                        break;
+                    }
                 }
             }
-            $request = Request::all();
-            $fields = new DynamicFields($page);
+            // create new entity
+            $router    = \Request::route()->getName();
+            $arrRouter    = config('asgard.dynamicfield.config.router');
+            if (array_key_exists($router, $arrRouter)) {
+                $entity = new $arrRouter[$router];
+            }
+            
+            $request    = Request::all();
+            $fields    = new DynamicFields($entity);
             $fields->init($request);
             $view->with('dynamicfield', $fields);
-            //print_r($fields); exit;
             $templateId = 'template';
-            $pageId    =  $page->id?$page->id:"0";
-            $view->nest('dynamicFieldScript', 'dynamicfield::admin.dynamicfield.script', compact('templateId', 'pageId'))
+            $entityType = get_class($entity);
+            $entityId = @$entity->id ? $entity->id : '0';
+            $view->nest('dynamicFieldScript', 'dynamicfield::admin.dynamicfield.script', compact('templateId', 'entityId', 'entityType'))
                 ->nest('dynamicFieldCss', 'dynamicfield::admin.dynamicfield.style');
         }
 

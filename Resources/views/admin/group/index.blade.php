@@ -27,24 +27,24 @@
                     <table class="data-table table table-bordered table-hover">
                         <thead>
                         <tr>
+                            <th>{{ trans('dynamicfield::group.table.id') }}</th>
                             <th>{{ trans('dynamicfield::group.table.name') }}</th>
-                            <th>{{ trans('dynamicfield::group.table.template') }}</th>
                             <th>{{ trans('dynamicfield::group.table.field_count') }}</th>
                             <th>{{ trans('core::core.table.actions') }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php if (isset($group)): ?>
-                        <?php foreach ($group as $value): ?>
+                        <?php $i = 1; foreach ($group as $value): ?>
                         <tr>
 							<td>
                                 <a href="{{ route('admin.dynamicfield.group.edit', [$value->id]) }}">
-                                    {{ $value->name }}
+                                    {{ $i }}
                                 </a>
                             </td>
-                            <td>
+							<td>
                                 <a href="{{ route('admin.dynamicfield.group.edit', [$value->id]) }}">
-                                    {{ $value->template }}
+                                    {{ $value->name }}
                                 </a>
                             </td>
 							<td>
@@ -59,13 +59,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <?php endforeach; ?>
+                        <?php $i++;endforeach; ?>
                         <?php endif; ?>
                         </tbody>
                         <tfoot>
                         <tr>
 							<th>{{ trans('dynamicfield::group.table.name') }}</th>
-                            <th>{{ trans('dynamicfield::group.table.template') }}</th>
                             <th>{{ trans('dynamicfield::group.table.field_count') }}</th>
                             <th>{{ trans('core::core.table.actions') }}</th>
                         </tr>
@@ -129,7 +128,7 @@
                 "columns": [
                     null,
                     null,
-					null,
+                    null,
                     { "sortable": false }
                 ]
             });

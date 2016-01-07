@@ -1,5 +1,5 @@
 
-	<div class="col-md-9 group-content">
+	<div class="col-md-10 group-content">
 		<div class="box box-body">
 			<h2>
 				@if($group->id>0)
@@ -28,14 +28,12 @@
 				</table>
 
 				<div class="field-data sortable ">
-					<?php $index=1; if (count($fields)) :?>
+					<?php $index = 1; if (count($fields)) :?>
 					<?php foreach ($fields as $field): ?>
 					<div class="another-field form-title" data-type="text" data-id='{{$index}}'>
 						@include('dynamicfield::admin.group.partials.fields.field', ['index' => $index,'type'=>$field->type,'field'=>$field])
 					</div>
-					<?php 
-                        $index++;endforeach;
-                    ?>
+					<?php ++$index;endforeach; ?>
 					<?php endif;?>
 					
 				</div>
@@ -50,27 +48,37 @@
 			<div class="more-files-template hidden" data-type="text" data-id='field_clone'>
 				<?php 
                     $field = new Modules\Dynamicfield\Entities\Field();
-                    $field->id = "field_clone";
-                    $field->label = "";
-                    $field->type = "text";
-                    $field->data = "{}";
+                    $field->id = 'field_clone';
+                    $field->label = '';
+                    $field->type = 'text';
+                    $field->data = '{}';
                 ?>
 				
 				@include('dynamicfield::admin.group.partials.fields.field', ['index' => 'field_clone','type'=>'text','field'=>$field])
 			</div>
-		</div>
-	</div>
-	<!--left content -->
-	<div class="col-md-3">
-		<div class="box box-primary">
-			<div class="box-body">
-				<div class="form-group{{ $errors->has('group.template') ? ' has-error' : '' }}">
-					{!! Form::label("group[template]", trans('page::pages.form.template')) !!}
-					{!! Form::select("group[template]", $all_templates, $group->template, ['class' => "form-control selectpicker", 'placeholder' => trans('page::pages.form.template')]) !!}	
-					{!! $errors->first("group.template", '<span class="help-block">:message</span>') !!}
+			<!-- -->
+			<div class="postbox" id="location">
+				<h3 class="title"><span>Location</span></h3>
+				<div class="inside">
+					<table class="data-table table dataTable table-location">
+						<tbody>
+							<tr>
+								<td class="rule-des">
+									<label for="post_type">Rules</label>
+									<p class="description">Create a set of rules to determine which edit screens will use these advanced custom fields</p>
+								</td>
+								<td>
+                                    @include('dynamicfield::admin.group.partials.location.rule',['locations'=>@$locations])
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
+			</div>
+			<div class="box-footer">
 				<button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.update') }}</button>
 			</div>
 		</div>
+		
 	</div>
-	<!--right content -->
+	<!--left content -->

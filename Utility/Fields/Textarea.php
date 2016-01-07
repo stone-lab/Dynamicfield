@@ -1,23 +1,23 @@
-<?php namespace Modules\Dynamicfield\Utility\Fields;
+<?php
+
+namespace Modules\Dynamicfield\Utility\Fields;
 
 use Collective\Html\FormFacade;
-use Log;
 
 class Textarea extends FieldBase
 {
-    public function __construct($field_info, $entityId, $locale)
+    public function __construct($fieldInfo, $entityId, $locale)
     {
-        parent:: __construct($field_info, $entityId, $locale);
+        parent:: __construct($fieldInfo, $entityId, $locale);
     }
 
     public function valid()
     {
         $bResult = false;
-        if ($this->getOption("required")=='true') {
+        if ($this->getOption('required') == 'true') {
             $value = $this->getValue();
             if (empty($value)) {
-                $this->_isValid = false;
-                Log::info($this->getFieldName());
+                $this->isValid = false;
             } else {
                 $bResult = true;
             }
@@ -25,56 +25,55 @@ class Textarea extends FieldBase
             $bResult = true;
         }
 
-        return $bResult ;
+        return $bResult;
     }
     public function render()
     {
-        $attrs        = array();
-        $id            = $this->getHtmlId();
-        $name        = $this->getHtmlName();
-        $value        = $this->getValue() ;
-        $label        = $this->getLabel() ;
+        $attrs = array();
+        $id = $this->getHtmlId();
+        $name = $this->getHtmlName();
+        $value = $this->getValue();
+        $label = $this->getLabel();
 
-        $css_class ="textarea form-control" ;
-        $error_message = "";
-        $attrs["id"] = $id;
-        if (!$this->_isValid) {
-            $error_message = sprintf("<span class='error'>%s</span>", $this->getErrorMessage());
-            $css_class .= " error";
+        $cssClass = 'textarea form-control';
+        $errorMessage = '';
+        $attrs['id'] = $id;
+        if (!$this->isValid) {
+            $errorMessage = sprintf("<span class='error'>%s</span>", $this->getErrorMessage());
+            $cssClass .= ' error';
         }
 
-        $defaultValue = $this->getOption("default_value");
+        $defaultValue = $this->getOption('default_value');
         if (!strlen($value)) {
             $value = $defaultValue;
         }
 
-        if ($this->getOption("required") == 'true') {
-            $css_class .=" required";
+        if ($this->getOption('required') == 'true') {
+            $cssClass .= ' required';
         }
-        if ($this->getOption("placeholder")) {
-            $attrs["placeholder"] = $this->getOption("placeholder");
+        if ($this->getOption('placeholder')) {
+            $attrs['placeholder'] = $this->getOption('placeholder');
         }
-        if ($this->getOption("rows")) {
-            $attrs["rows"] = $this->getOption("rows");
+        if ($this->getOption('rows')) {
+            $attrs['rows'] = $this->getOption('rows');
         }
-        $attrs["class"]        = $css_class;
+        $attrs['class'] = $cssClass;
 
-        $html                ="";
+        $html = '';
         if (!empty($label)) {
             $html .= FormFacade::label($label);
         }
-        $html                .= FormFacade::textarea($name, $value, $attrs) . $error_message;
-        $html                = sprintf($this->_html_item_template, $html);
+        $html                .= FormFacade::textarea($name, $value, $attrs).$errorMessage;
+        $html = sprintf($this->htmlItemTemplate, $html);
 
-        return $html ;
+        return $html;
     }
 
     public function getErrorMessage()
     {
-        $error ="";
-        $error = $this->getOption("error_message") ;
+        $error = $this->getOption('error_message');
 
-        return $error ;
+        return $error;
     }
 
     public function loadFieldData()

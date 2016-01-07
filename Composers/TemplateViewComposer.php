@@ -1,4 +1,6 @@
-<?php namespace Modules\Dynamicfield\Composers;
+<?php
+
+namespace Modules\Dynamicfield\Composers;
 
 use Illuminate\Contracts\View\View;
 use Modules\Page\Composers\TemplateViewComposer as PageTemplateViewComposer;

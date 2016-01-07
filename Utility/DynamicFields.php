@@ -1,54 +1,54 @@
-<?php namespace Modules\Dynamicfield\Utility;
+<?php
 
-use Illuminate\View\View ;
+namespace Modules\Dynamicfield\Utility;
+
+use Illuminate\View\View;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class DynamicFields
 {
-    private $_field_type;
     protected $entities;
-    public static $test_index =1;
     private $request = null;
-    public function __construct($page, $locale =null)
+    private $locale;
+    private $page;
+    private $type;
+
+    public function __construct($page, $locale = null)
     {
         $this->locale = $locale;
-        $this->page = $page ;
+        $this->page   = $page;
+        $this->type   = get_class($page);
     }
-    public function init($default=null)
+    public function init($default = null)
     {
-        $this->request    =  $default;
-        $locale            = $this->locale;
-        $page            = $this->page;
+        $this->request = $default;
+        $locale = $this->locale;
+        $entityItem = $this->page;
+        $type = $this->type;
 
         if (isset($locale)) {
-            $entity = new Entity($page->id, $page->template, $locale);
+            $entity = new Entity($entityItem->id, $entityItem->template, $locale, $type);
             $entity->init($default);
             $this->entities[$locale] = $entity;
         } else {
-            $languages = LaravelLocalization::getSupportedLocales() ;
-            foreach ($languages as $locale=>$code) {
-                $entity = new Entity($page->id, $page->template, $locale);
-
+            $languages = LaravelLocalization::getSupportedLocales();
+            foreach ($languages as $locale => $code) {
+                $entity = new Entity(@$entityItem->id, @$entityItem->template, $locale, $type);
                 $entity->init($default);
-
                 $this->entities[$locale] = $entity;
             }
         }
-        self::$test_index++;
     }
     public function render($locale)
     {
         $htmlFields = $this->renderFields($locale);
         $html = view('dynamicfield::admin.dynamicfield.fields', compact('locale', 'htmlFields'))->render();
 
-        return $html ;
+        return $html;
     }
-    public function renderFields($locale, $request = null)
+    public function renderFields($locale)
     {
-        $html = "";
-
         $entity = $this->entities[$locale];
-
         if (isset($this->request)) {
             $entity->valid();
         }
@@ -56,26 +56,26 @@ class DynamicFields
 
         return $html;
     }
-    public function getFieldValue($fieldName, $locale="en")
+    public function getFieldValue($fieldName, $locale = 'en')
     {
-        $strValue  = "";
-        $entity  = $this->entities[$locale];
-        $values    = $entity->values();
+        $strValue = '';
+        $entity = $this->entities[$locale];
+        $values = $entity->values();
         if (count($values)) {
             $keys = array_keys($values);
             if (in_array($fieldName, $keys)) {
-                $strValue  = $values[$fieldName] ;
+                $strValue = $values[$fieldName];
             }
         }
 
-        return $strValue  ;
+        return $strValue;
     }
-    public function getFieldValues($locale="en")
+    public function getFieldValues($locale = 'en')
     {
-        $entity  = $this->entities[$locale];
-        $values    = $entity->values();
+        $entity = $this->entities[$locale];
+        $values = $entity->values();
 
-        return $values  ;
+        return $values;
     }
     public function valid()
     {

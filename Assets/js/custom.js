@@ -12,6 +12,9 @@ var dynamicEditorConfig = {
 
 };
 $( document ).ready(function() {
+	$(function () {
+		$("select.drop-parameter").change();
+	});
 	// ajax when change select type
 	//TODO remove it as soon it is defined globally
 	$.ajaxSetup({
@@ -558,3 +561,109 @@ function initDynamicEditor(){
     });
 	
 }
+
+function location_add_group(o){
+	// vars
+	var parent = $(o).closest('div');
+	var $group = parent.find('.location-group:last'),
+		$group2 = $group.clone(),
+		old_id = $group2.attr('data-id'),
+		new_id = $("#index_group").val();
+		new_id++;
+	var new_index = "group_-" + new_id;	
+	// update names
+	$group2.find('[name]').each(function(){
+		var name = $(this).attr('name');
+		$(this).attr('name', name.replace(old_id, new_index) );
+		
+	});
+	// update data-i
+	$group2.attr( 'data-id', new_index );
+	$("#index_group").val(new_id);
+	// update h4
+	$group2.find('h4').text( "or" );
+	// remove all tr's except the first one
+	$group2.find('tr:not(:first)').remove();
+	// add tr
+	$group.after( $group2 );
+}
+function location_add_rule(o){
+	// vars
+	var $tr = $(o).closest('tr');
+	var $tr2 = $tr.clone(),
+		old_id = $tr2.attr('data-id'),
+		new_id = $("#index_item").val();
+		new_id++;
+	// update names
+	var new_index = "rule_-" + new_id;
+	$tr2.find('[name]').each(function(){
+		var name = $(this).attr('name');
+		$(this).attr('name', name.replace(old_id, new_index) );
+	});
+	
+	$("#index_item").val(new_id);
+	// update data-i
+	$tr2.attr( 'data-id', new_index );
+	// add tr
+	$tr.after( $tr2 );
+}
+function location_remove(o){
+	// vars
+	var is_remove = true;
+	var $tr = $(o).closest('tr');
+	var count_group = $(".location-groups").find('.location-group').length;
+	if(count_group == 1){
+		var count_item = $(".location-group").find('tr').length;
+		if(count_item == 1){
+			is_remove = false;
+		}
+	}
+	var siblings = $tr.siblings('tr').length;
+	if(is_remove){
+		if( siblings == 0 )
+		{
+			// remove group
+			$group = $tr.closest('.location-group');
+			updateDeleteLocation($group,"delete_group");
+			$group.remove();
+		}
+		else
+		{
+			// remove item
+			updateDeleteLocation($tr,"delete_item");
+			$tr.remove();
+		}
+	}
+}
+
+function updateDeleteLocation(obj,deleteName){
+	var data_id = obj.attr("data-id");
+	if(data_id !="" ){
+		var _delete_Id  = '#' + deleteName;
+		var strItems = $(_delete_Id).val();
+		if(strItems!="") strItems+= ",";
+		strItems	+= data_id;
+		$(_delete_Id).val(strItems);
+	}
+}
+
+function changeLocationParameter(obj,value){
+	var tr = $(obj).closest('tr');
+	var selected = $(obj).val();
+	var dropName = $(obj).attr("name");
+	var reqData = "selected=" + selected + "&value=" + value + "&dropName=" + dropName ;
+	jQuery.ajax( {
+				url : "renderLocationDrop",
+				type : 'POST',
+				enctype : 'multipart/form-data',
+				datatype: 'json',
+				data : reqData +"&ajax=true",
+				success : function(responseData) {
+					var data = eval(responseData);
+					tr.find('td.value').html(data.html);
+			}
+	});
+}
+
+
+

@@ -18,33 +18,31 @@
 				</table>
 				
 				<div class="field-data sortable">
-					<?php $index=1; if (count($fields)) :?>
+					<?php $index = 1; if (count($fields)) :?>
 					<?php foreach ($fields as $field): ?>
-					<?php $prefix_name = sprintf("field[%s][repeater]", $index);?>
+					<?php $prefixName = sprintf('field[%s][repeater]', $index);?>
 					<div class="another-field form-title" data-type="text" data-id='{{$index}}'>
-						@include('dynamicfield::admin.group.partials.fields.repeater.field', ['index' => $index,'type'=>$field->type,'field'=>$field, 'repeater_index'=>$repeater_index])
+						@include('dynamicfield::admin.group.partials.fields.repeater.field', ['index' => $index,'type'=>$field->type,'field'=>$field, 'repeater_index'=>$repeaterIndex])
 					</div>
-					<?php 
-                        $index++;endforeach;
-                    ?>
+					<?php ++$index;endforeach; ?>
 					<?php endif;?>
 					
 				</div>
 				<!-- fields container all field clone-->
 				<div class="table_footer">
-					<a class="btn btn-primary btn-add-field" data-toggle="modal"  repeater-data-id ="{{ $repeater_index }}"  onclick="appendField(event,this)">
+					<a class="btn btn-primary btn-add-field" data-toggle="modal"  repeater-data-id ="{{ $repeaterIndex }}"  onclick="appendField(event,this)">
 						<i class="fa fa-pencil"></i> + {{ trans('dynamicfield::field.button.add_field') }}
 					</a>
 				</div>
 			</div>
 			<div class="more-files-template hidden" data-type="text" data-id='field_clone'>
 				<?php 
-                    $prefix_name = sprintf("field[%s][repeater]", "repeater_clone");
+                    $prefixName = sprintf('field[%s][repeater]', 'repeater_clone');
                     $field = new Modules\Dynamicfield\Entities\Field();
                     $field->id = -1;
-                    $field->label = "";
-                    $field->type = "text";
-                    $field->data = "{}";
+                    $field->label = '';
+                    $field->type = 'text';
+                    $field->data = '{}';
                 ?>
 				
 				@include('dynamicfield::admin.group.partials.fields.repeater.field', ['index' => 'field_clone','type'=>'text','field'=>$field, 'repeater_index'=>"repeater_clone"	])

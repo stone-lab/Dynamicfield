@@ -1,33 +1,29 @@
-<?php namespace Modules\Dynamicfield\Entities;
+<?php
 
-use Dimsav\Translatable\Translatable;
+namespace Modules\Dynamicfield\Entities;
+
 use Illuminate\Database\Eloquent\Model;
 
 class RepeaterTranslation extends Model
 {
-    /* use Translatable; */
-
     protected $table = 'dynamicfield__repeater_translations';
-    /* public $translatedAttributes = []; */
-    protected $fillable = ['locale'];
+    protected $fillable = ['entity_repeater_id','locale','order'];
 
     public function entity()
     {
         return $this->belongsTo('Modules\Dynamicfield\Entities\Entity', 'entity_repeater_id', 'id');
     }
 
-    public function FieldValues()
+    public function fieldValues()
     {
         return $this->hasMany('Modules\Dynamicfield\Entities\RepeaterValue', 'translation_id', 'id');
     }
 
-    public function getFieldValue($field_id)
+    public function getFieldValue($fieldId)
     {
         $object = new RepeaterValue();
-
         if (is_numeric($this->id)) {
-            $repeatValues =    $this->FieldValues()->where('field_id', $field_id)->get();
-
+            $repeatValues = $this->fieldValues()->where('field_id', $fieldId)->get();
             if ($repeatValues->count()) {
                 $object = $repeatValues[0];
             }

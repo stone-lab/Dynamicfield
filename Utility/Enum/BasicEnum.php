@@ -1,4 +1,6 @@
-<?php namespace Modules\Dynamicfield\Utility\Enum;
+<?php
+
+namespace Modules\Dynamicfield\Utility\Enum;
 
 abstract class BasicEnum
 {
@@ -7,14 +9,14 @@ abstract class BasicEnum
     {
         $values = self::getConstants();
 
-        return $values ;
+        return $values;
     }
     public static function getKeys()
     {
         $constants = self::getConstants();
         $keys = array_keys($constants);
 
-        return $keys ;
+        return $keys;
     }
     private static function getConstants()
     {
@@ -25,10 +27,10 @@ abstract class BasicEnum
         if (!array_key_exists($calledClass, self::$constCacheArray)) {
             $reflect = new \ReflectionClass($calledClass);
             $arrItems = $reflect->getConstants();
-            $arrNew    = array();
-            foreach ($arrItems as $k=>$v) {
+            $arrNew = array();
+            foreach ($arrItems as $k => $v) {
                 $newKey = strtolower($k);
-                $arrNew[$newKey] = $v ;
+                $arrNew[$newKey] = $v;
             }
             self::$constCacheArray[$calledClass] = $arrNew;
         }

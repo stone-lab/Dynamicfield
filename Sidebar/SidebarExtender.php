@@ -1,4 +1,6 @@
-<?php namespace Modules\Dynamicfield\Sidebar;
+<?php
+
+namespace Modules\Dynamicfield\Sidebar;
 
 use Maatwebsite\Sidebar\Group;
 use Maatwebsite\Sidebar\Item;
