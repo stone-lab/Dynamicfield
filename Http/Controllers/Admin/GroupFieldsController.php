@@ -2,20 +2,19 @@
 
 namespace Modules\Dynamicfield\Http\Controllers\Admin;
 
+use Collective\Html\FormFacade;
 use Illuminate\Http\Request;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Dynamicfield\Entities\Group;
+use Modules\Dynamicfield\Entities\Rule;
 use Modules\Dynamicfield\Http\Requests\GroupFieldRequest;
 use Modules\Dynamicfield\Repositories\GroupRepository;
 use Modules\Dynamicfield\Utility\DynamicFields;
-use Modules\Page\Repositories\PageRepository;
-use Modules\Page\Entities\Page;
-use Request as BaseRequest;
-use Collective\Html\FormFacade;
 use Modules\Dynamicfield\Utility\Template;
-use Modules\Dynamicfield\Entities\Rule;
-use Log;
+use Modules\Page\Entities\Page;
+use Modules\Page\Repositories\PageRepository;
+use Request as BaseRequest;
 
 class GroupFieldsController extends AdminBaseController
 {
@@ -81,6 +80,7 @@ class GroupFieldsController extends AdminBaseController
         if ($bResult) {
             flash()->success(trans($tran_core, ['name' => trans('dynamicfield::dynamicfield.title.field_group')]));
         }
+
         return redirect()->route('admin.dynamicfield.group.index');
     }
 
@@ -133,10 +133,10 @@ class GroupFieldsController extends AdminBaseController
         $index = $_REQUEST['field_index'];
         $repeaterIndex = $index;
 
-        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($type);
+        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\" . ucfirst($type);
         $options = $optionClass::getList();
         $prefixName = 'field[%s]';
-        $viewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
+        $viewPath = 'dynamicfield::admin.group.partials.fields.' . $type;
         $fields = array();
         $html = view($viewPath, compact('index', 'options', 'fields', 'prefixName', 'repeaterIndex'));
 
@@ -153,9 +153,9 @@ class GroupFieldsController extends AdminBaseController
         $repeaterIndex = $_REQUEST['repeater_index'];
 
         $prefixName = sprintf('field[%s][repeater][%s]', $repeaterIndex, $index);
-        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($type);
+        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\" . ucfirst($type);
         $options = $optionClass::getList();
-        $viewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
+        $viewPath = 'dynamicfield::admin.group.partials.fields.' . $type;
         $html = view($viewPath, compact('index', 'options', 'repeaterIndex', 'prefixName'));
 
         return response()->json(['html' => $html->render()]);
@@ -221,6 +221,7 @@ class GroupFieldsController extends AdminBaseController
                 break;
         }
         $html = FormFacade::select($name, $arrData, $value, ['class' => "form-control"]);
+
         return response()->json(['html' => $html]);
     }
 }

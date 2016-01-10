@@ -63,7 +63,7 @@ class Text extends FieldBase
         if (!empty($label)) {
             $html            .= FormFacade::label($label);
         }
-        $html                .= FormFacade::text($name, $value, $attrs).$errorMessage;
+        $html                .= FormFacade::text($name, $value, $attrs) . $errorMessage;
         $html = sprintf($this->htmlItemTemplate, $html);
 
         return $html;

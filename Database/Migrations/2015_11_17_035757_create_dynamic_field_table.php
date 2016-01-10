@@ -32,7 +32,7 @@ class CreateDynamicfieldTable extends Migration
             $table->increments('id');
             $table->integer('entity_id')->unsigned();
             $table->integer('field_id')->unsigned();
-			$table->string('entity_type', 200);
+            $table->string('entity_type', 200);
             $table->foreign('field_id')->references('id')->on('dynamicfield__fields')->onDelete('cascade');
             $table->timestamps();
         });
@@ -75,7 +75,7 @@ class CreateDynamicfieldTable extends Migration
             $table->foreign('field_id')->references('id')->on('dynamicfield__repeater_fields')->onDelete('cascade');
             $table->timestamps();
         });
-        
+
         Schema::create('dynamicfield__rules', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');

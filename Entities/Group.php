@@ -22,9 +22,9 @@ class Group extends Model
     public function getListFields()
     {
         $data = $this->fields()->orderBy('order')->get();
+
         return $data;
     }
-
 
     public function scopeFindByTemplate($query, $template)
     {

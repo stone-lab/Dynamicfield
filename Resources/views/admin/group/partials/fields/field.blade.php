@@ -88,7 +88,7 @@
 			</tr>
 			<?php
                 $prefixName = 'field[%s]';
-                $strViewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
+                $strViewPath = 'dynamicfield::admin.group.partials.fields.' . $type;
                 if ($type == 'repeater') {
                     $fields = $field->getListFields();
                     $repeaterIndex = $index;

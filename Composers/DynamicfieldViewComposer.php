@@ -47,7 +47,7 @@ class DynamicfieldViewComposer
             if (array_key_exists($router, $arrRouter)) {
                 $entity = new $arrRouter[$router];
             }
-            
+
             $request    = Request::all();
             $fields    = new DynamicFields($entity);
             $fields->init($request);

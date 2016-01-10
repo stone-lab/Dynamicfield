@@ -16,7 +16,7 @@ class RepeaterField extends Model
 
     public function getOptions()
     {
-        $opitionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($this->type);
+        $opitionClass = "Modules\Dynamicfield\Utility\Enum\Options\\" . ucfirst($this->type);
         $arrDefault = $opitionClass::getList();
         $jsonData = (array) json_decode($this->data);
         $result = array_merge($arrDefault, $jsonData);

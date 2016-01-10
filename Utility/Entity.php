@@ -131,6 +131,7 @@ class Entity
                 $arrResult[$rule->group_id] = $rule->group_id;
             }
         }
+
         return $arrResult;
     }
 

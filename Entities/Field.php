@@ -30,7 +30,7 @@ class Field extends Model
     public function getOptions()
     {
         $result = array();
-        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($this->type);
+        $optionClass = "Modules\Dynamicfield\Utility\Enum\Options\\" . ucfirst($this->type);
         if (class_exists($optionClass)) {
             $arrDefault = $optionClass::getList();
             $jsonData = (array) json_decode($this->data);

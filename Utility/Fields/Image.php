@@ -6,7 +6,6 @@ use Collective\Html\FormFacade;
 
 class Image extends FieldBase
 {
-
     public function __construct($fieldInfo, $entityId, $locale)
     {
         parent:: __construct($fieldInfo, $entityId, $locale);
@@ -35,7 +34,7 @@ class Image extends FieldBase
         $label = $this->getLabel();
         $cssClass = 'file';
         $attrs['id'] = $id;
-       
+
         if ($this->getOption('required') == 'true') {
             $cssClass .= ' required';
         }

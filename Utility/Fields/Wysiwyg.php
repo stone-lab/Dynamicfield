@@ -61,7 +61,7 @@ class Wysiwyg extends FieldBase
         if (!empty($label)) {
             $html .= FormFacade::label($label);
         }
-        $html                .= FormFacade::textarea($name, $value, $attrs).$errorMessage;
+        $html                .= FormFacade::textarea($name, $value, $attrs) . $errorMessage;
         $html = sprintf($this->htmlItemTemplate, $html);
 
         return $html;

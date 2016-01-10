@@ -28,7 +28,7 @@ class FrontendViewComposer
         $arrAllow = ['page', 'homepage',"en.blog.slug"];
         $data = $view->getData();
         $routName = Route::currentRouteName();
-        
+
         if (in_array($routName, $arrAllow)) {
             $arrType = config('asgard.dynamicfield.config.entity-type');
             $arrType =  array_keys($arrType);
@@ -48,6 +48,7 @@ class FrontendViewComposer
                 }
             }
         }
+
         return $view;
     }
 }

@@ -23,7 +23,7 @@ if (!count($locations)) {
     $rule_delete_name    = 'group[delete_item]';
     $arrOperator        = Modules\Dynamicfield\Utility\Enum\Rules\Operator::getList();
     /* $arrValue 			= Modules\Dynamicfield\Utility\Enum\Rules\Type::getList(); */
-    
+
     $arrValue            = config('asgard.dynamicfield.config.entity-type');
     $arrParameter        = Modules\Dynamicfield\Utility\Enum\Rules\Parameter::getList();
 ?>
@@ -34,7 +34,7 @@ if (!count($locations)) {
 {!! Form::hidden($rule_delete_id,null, ['class' => "form-control",'id'=>$rule_delete_id,'name'=>$rule_delete_name]) !!}	
 <?php if (isset($locations)): ?>
 	<?php $i = 1; foreach ($locations as $group_id => $group): ?>
-		<?php $group_id = "group_".$group_id; ?>
+		<?php $group_id = "group_" . $group_id; ?>
 		<div data-id="{{ $group_id }}" class="location-group">
 		
 		<?php if ($group_id == 'group_0'): ?>
@@ -50,7 +50,7 @@ if (!count($locations)) {
                     }
                 ?>
 					<?php foreach ($group as $rule_id => $rule):?>
-					<?php $rule_id = "rule_".$rule_id; ?>
+					<?php $rule_id = "rule_" . $rule_id; ?>
 					<tr data-id="{{ $rule_id }}">
 						<td class="param">
 							<?php 
@@ -74,7 +74,7 @@ if (!count($locations)) {
 							<?php 
                                 $value_name = 'location[%s][%s][value]';
                                 $value_name = sprintf($value_name, $group_id, $rule_id);
-                                
+
                             ?>
 							{!! Form::select($value_name, $arrValue,$value_selected, ['class' => "form-control"]) !!}
 						</td>

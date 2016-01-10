@@ -2,9 +2,9 @@
 
 namespace Modules\Dynamicfield\Listener;
 
+use Modules\Blog\Entities\Post;
 use Modules\Dynamicfield\Utility\DynamicFields;
 use Modules\Page\Entities\Page;
-use Modules\Blog\Entities\Post;
 
 class UpdateProcess
 {
@@ -38,7 +38,6 @@ class UpdateProcess
     }
     public function handle($event)
     {
-       
     }
     public function subscribe($events)
     {

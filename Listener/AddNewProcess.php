@@ -2,11 +2,11 @@
 
 namespace Modules\Dynamicfield\Listener;
 
+use Modules\Blog\Entities\Post;
+use Modules\Blog\Events\BlogWasCreated;
 use Modules\Dynamicfield\Utility\DynamicFields;
 use Modules\Page\Entities\Page;
-use Modules\Blog\Entities\Post;
 use Modules\Page\Events\PageWasCreated;
-use Modules\Blog\Events\BlogWasCreated;
 
 class AddNewProcess
 {
@@ -17,9 +17,8 @@ class AddNewProcess
     {
         //
     }
-	public function handle($event)
+    public function handle($event)
     {
-       
     }
     /**
      * Handle the event.

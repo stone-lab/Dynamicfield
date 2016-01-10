@@ -94,7 +94,7 @@
 			</tr>
 			<?php
                 $prefixName = sprintf('field[%s][repeater][%s]', $repeaterIndex, $index);
-                $strViewPath = 'dynamicfield::admin.group.partials.fields.'.$type;
+                $strViewPath = 'dynamicfield::admin.group.partials.fields.' . $type;
             ?>
 			 @include($strViewPath)
 			<tr class="field_save">

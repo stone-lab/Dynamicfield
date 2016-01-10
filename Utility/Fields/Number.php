@@ -67,7 +67,7 @@ class Number extends FieldBase
             $html .= FormFacade::label($label);
         }
 
-        $html                .= FormFacade::number($name, $value, $attrs).$errorMessage;
+        $html                .= FormFacade::number($name, $value, $attrs) . $errorMessage;
         $html = sprintf($this->htmlItemTemplate, $html);
 
         return $html;

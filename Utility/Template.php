@@ -28,7 +28,7 @@ class Template
 
         $templates = [];
 
-        foreach ($this->finder->allFiles($path.'/views') as $template) {
+        foreach ($this->finder->allFiles($path . '/views') as $template) {
             $relativePath = $template->getRelativePath();
 
             if ($this->isLayoutOrPartial($relativePath)) {
@@ -39,7 +39,7 @@ class Template
             $file = $this->removeExtensionsFromFilename($template);
 
             if ($this->hasSubdirectory($relativePath)) {
-                $templates[str_replace('/', '.', $relativePath).'.'.$file] = $templateName;
+                $templates[str_replace('/', '.', $relativePath) . '.' . $file] = $templateName;
             } else {
                 $templates[$file] = $templateName;
             }
@@ -88,7 +88,7 @@ class Template
         $relativePath = $template->getRelativePath();
         $fileName = $this->removeExtensionsFromFilename($template);
 
-        return $this->hasSubdirectory($relativePath) ? $relativePath.'/'.$fileName : $fileName;
+        return $this->hasSubdirectory($relativePath) ? $relativePath . '/' . $fileName : $fileName;
     }
 
     /**

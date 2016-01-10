@@ -6,8 +6,8 @@ use DB;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Dynamicfield\Entities\Field;
 use Modules\Dynamicfield\Entities\RepeaterField;
-use Modules\Dynamicfield\Repositories\GroupRepository;
 use Modules\Dynamicfield\Entities\Rule;
+use Modules\Dynamicfield\Repositories\GroupRepository;
 
 class EloquentGroupRepository extends EloquentBaseRepository implements GroupRepository
 {
@@ -154,7 +154,7 @@ class EloquentGroupRepository extends EloquentBaseRepository implements GroupRep
     private function getFieldData($field)
     {
         $type = $field['type'];
-        $opitionClass = "Modules\Dynamicfield\Utility\Enum\Options\\".ucfirst($type);
+        $opitionClass = "Modules\Dynamicfield\Utility\Enum\Options\\" . ucfirst($type);
         $options = $opitionClass::getKeys();
 
         $json = array();

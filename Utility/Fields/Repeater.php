@@ -73,8 +73,8 @@ class Repeater extends FieldBase
     {
         $controls = array();
         $repeaterField = $this->field;
-        $nameFormat = '%s[fields]'.sprintf('[%s][value][%s]', $this->getFieldId(), $repeaterId).'[%s][value]';
-        $idFormat = '%s_'.sprintf('%s_%s_', $this->getFieldId(), $repeaterId).'_%s_value';
+        $nameFormat = '%s[fields]' . sprintf('[%s][value][%s]', $this->getFieldId(), $repeaterId) . '[%s][value]';
+        $idFormat = '%s_' . sprintf('%s_%s_', $this->getFieldId(), $repeaterId) . '_%s_value';
         $filedOfRepeater = $repeaterField->getListFields();
 
         if ($filedOfRepeater->count()) {
@@ -93,8 +93,8 @@ class Repeater extends FieldBase
     private function createListControl($repeater)
     {
         $repeater_field = $this->field;
-        $nameFormat = '%s[fields]'.sprintf('[%s][value][%s]', $this->getFieldId(), $repeater->id).'[%s][value]';
-        $idFormat = '%s_'.sprintf('%s_%s_', $this->getFieldId(), $repeater->id).'_%s_value';
+        $nameFormat = '%s[fields]' . sprintf('[%s][value][%s]', $this->getFieldId(), $repeater->id) . '[%s][value]';
+        $idFormat = '%s_' . sprintf('%s_%s_', $this->getFieldId(), $repeater->id) . '_%s_value';
         $filedOfRepeater = $repeater_field->getListFields();
 
         if ($filedOfRepeater->count()) {
@@ -172,8 +172,8 @@ class Repeater extends FieldBase
                                 <label class='circle' >%s</label>
                                 <input type='hidden' name='%s' id='%s' value='%s'/>
                             </td>";
-        $repeaterDeleteId = 'repeater_delete_'.$this->locale.'_'.$this->getFieldId();
-        $repeaterTableId = 'repeater_table_'.$this->locale.'_'.$this->getFieldId();
+        $repeaterDeleteId = 'repeater_delete_' . $this->locale . '_' . $this->getFieldId();
+        $repeaterTableId = 'repeater_table_' . $this->locale . '_' . $this->getFieldId();
         $repeaterDeleteName = sprintf('%s[fields][%s][delete]', $this->locale, $this->getFieldId());
         $tdDeleteBtn = "<td class='last'>
 							<a class='btn-delete' onclick=\"deleteRepeaterField('{$this->locale}_{$this->getFieldId()}',this)\">
@@ -185,7 +185,7 @@ class Repeater extends FieldBase
         $headers = $this->repeaterHeaders;
         $columns = count($headers) + 2;
         $tableHeader = "<tr class='repeater-group'>
-							<th colspan='{$columns}'>".$this->getLabel().'</th>
+							<th colspan='{$columns}'>" . $this->getLabel() . '</th>
 						</tr>';
 
         $columnWidth = 50;
@@ -195,21 +195,21 @@ class Repeater extends FieldBase
             $tdHeader = '';
             $tdTemplate = '';
             foreach ($headers as $field) {
-                $tdHeader .= sprintf("<th class='caption' width='%s'>%s</th>", $columnWidth.'%', $field->getLabel());
+                $tdHeader .= sprintf("<th class='caption' width='%s'>%s</th>", $columnWidth . '%', $field->getLabel());
                 $field->setLabel('');
-                $tdTemplate .= sprintf("<td width='%s'>%s</td>", $columnWidth.'%', $field->render());
+                $tdTemplate .= sprintf("<td width='%s'>%s</td>", $columnWidth . '%', $field->render());
             }
 
-            $groupName = $this->locale.'[fields][%s][order][%s]';
+            $groupName = $this->locale . '[fields][%s][order][%s]';
             $groupName = sprintf($groupName, $this->fieldId, 'clone');
             // assign template to create new item of repeater
             $tdFirstNew = sprintf($tdFirstBody, -1, $groupName, $groupName, -1);
-            $tdTemplate = $tdFirstNew.$tdTemplate.$tdDeleteBtn;
+            $tdTemplate = $tdFirstNew . $tdTemplate . $tdDeleteBtn;
             $repeaterFormat = "<tr class='repeater-template' id='repeater_template_%s_%s'>%s</tr>";
             $htmlRepeaterTemplate = sprintf($repeaterFormat, $this->locale, $this->getFieldId(), $tdTemplate);
 
             // assign header lable for repeater
-            $tdHeader = '<th>&nbsp;</th>'.$tdHeader."<th class='last'>&nbsp;</th>";
+            $tdHeader = '<th>&nbsp;</th>' . $tdHeader . "<th class='last'>&nbsp;</th>";
             $tableHeader .= $tdHeader;
         }
         $trBody = '';
@@ -217,7 +217,7 @@ class Repeater extends FieldBase
             // make row
             $i = 1;
             foreach ($groups as $groupId => $group) {
-                $groupName = $this->locale.'[fields][%s][order][%s]';
+                $groupName = $this->locale . '[fields][%s][order][%s]';
                 $groupOrder = $group['order'];
                 $groupName = sprintf($groupName, $this->fieldId, $groupId);
 
@@ -225,17 +225,17 @@ class Repeater extends FieldBase
                 $tdBody = '';
                 foreach ($fields as $field) {
                     $field->setLabel('');
-                    $tdBody .= sprintf("<td width='%s'>%s</td>", $columnWidth.'%', $field->render());
+                    $tdBody .= sprintf("<td width='%s'>%s</td>", $columnWidth . '%', $field->render());
                 }
 
                 $tdFirstNew = sprintf($tdFirstBody, $i, $groupName, $groupName, $groupOrder);
-                $tdBody = $tdFirstNew.$tdBody.$tdDeleteBtn;
+                $tdBody = $tdFirstNew . $tdBody . $tdDeleteBtn;
                 $trBody .= sprintf("<tr data-id='%s' class='another-field'>%s</tr>", $groupId, $tdBody);
                 ++$i;
             }
         }
-        $tableBody = $trBody.$htmlRepeaterTemplate;
-        $htmlAddNewBtn = "<a  class ='btn btn-primary btn-flat' onclick=\"addRepeaterField('{$this->locale}_{$this->getFieldId()}')\">".trans('Add Item').'</a>';
+        $tableBody = $trBody . $htmlRepeaterTemplate;
+        $htmlAddNewBtn = "<a  class ='btn btn-primary btn-flat' onclick=\"addRepeaterField('{$this->locale}_{$this->getFieldId()}')\">" . trans('Add Item') . '</a>';
         $tableFooter = sprintf("<td colspan='{$columns}'>%s</td>", $htmlAddNewBtn);
 
         $tableHtml = "<table  class='table-repeater ' id='{$repeaterTableId}' >
@@ -247,11 +247,11 @@ class Repeater extends FieldBase
         $html = sprintf($tableHtml, $tableHeader, $tableBody, $tableFooter);
 
         // assign index for repeater to make new item
-        $repeaterIndexId = 'repeater_index_'.$this->locale.'_'.$this->getFieldId();
+        $repeaterIndexId = 'repeater_index_' . $this->locale . '_' . $this->getFieldId();
 
         $inputIndex = FormFacade::hidden($repeaterIndexId, 0, array('id' => $repeaterIndexId));
         $inputDelete = FormFacade::hidden($repeaterDeleteName, '', array('id' => $repeaterDeleteId));
-        $html            .= $inputIndex.$inputDelete;
+        $html            .= $inputIndex . $inputDelete;
 
         $html            .=  sprintf("<script>$( document ).ready(function() {bindSortableForRepeater('%s');});</script>", $repeaterTableId);
 

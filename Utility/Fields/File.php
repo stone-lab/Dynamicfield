@@ -28,7 +28,7 @@ class File extends FieldBase
                 $this->value = $this->getOption('default');
             }
         } else {
-            $fileName = $this->entityId.'_'.$this->fieldId.'.'.$this->file->getClientOriginalExtension();
+            $fileName = $this->entityId . '_' . $this->fieldId . '.' . $this->file->getClientOriginalExtension();
             $this->value = $fileName;
         }
     }
@@ -77,7 +77,7 @@ class File extends FieldBase
         if (!empty($label)) {
             $html .= FormFacade::label($label);
         }
-        $html                .= FormFacade::file($name, $attrs).$errorMessage;
+        $html                .= FormFacade::file($name, $attrs) . $errorMessage;
         $html                .= $img;
 
         $html = sprintf($this->htmlItemTemplate, $html);
@@ -96,7 +96,7 @@ class File extends FieldBase
     {
         $value = $this->value;
         if ($value) {
-            $value = config('asgard.dynamicfield.config.files-path').$value;
+            $value = config('asgard.dynamicfield.config.files-path') . $value;
         }
 
         return $value;
@@ -106,9 +106,9 @@ class File extends FieldBase
     public function save()
     {
         if (isset($this->file)) {
-            $fileName = $this->entityId.'_'.$this->fieldId.'.'.$this->file->getClientOriginalExtension();
+            $fileName = $this->entityId . '_' . $this->fieldId . '.' . $this->file->getClientOriginalExtension();
             $this->value = $fileName;
-            $this->file->move(public_path().config('asgard.dynamicfield.config.files-path'), $fileName);
+            $this->file->move(public_path() . config('asgard.dynamicfield.config.files-path'), $fileName);
         }
         parent::save();
     }
