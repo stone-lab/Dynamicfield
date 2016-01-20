@@ -4,42 +4,8 @@
 **You are welcome to work on it**
 
 ## Introduction
-To make it work, you need to alter the Page Module.
-
-in: 
-Page/Resources/views/admin/create.blade.php
-Page/Resources/views/admin/edit.blade.php
-
-add to @section('style')
-Line ~17
-```php
-	@if($dynamicFieldCss)
-		{!! $dynamicFieldCss !!}
-	@endif
-```
-
-add to @section('scripts')
-Line ~90
-```php
-    @if($dynamicFieldScript)
-        {!! $dynamicFieldScript !!}
-    @endif
-```
-
-in: 
-Page/Resources/views/admin/partials/create-fields.blade.php 	
-Line ~19
-
-Page/Resources/views/admin/partials/edit-fields.blade.php 	
-Line ~24
-
-above <div class="box-group" id="accordion">
-
-```php
-    @if($dynamicfield)
-        {!! $dynamicfield->render($lang) !!}
-    @endif
-```
+It's no more needed to alter Page template. It works now with the native functions.
+More details come soon.
 
 ## Usage
 
