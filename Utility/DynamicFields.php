@@ -2,7 +2,6 @@
 
 namespace Modules\Dynamicfield\Utility;
 
-use Illuminate\View\View;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class DynamicFields
@@ -10,20 +9,26 @@ class DynamicFields
     protected $entities;
     private $request = null;
     private $locale;
-    private $page;
+    private $entity;
     private $type;
 
-    public function __construct($page, $locale = null)
+    public function __construct($entity, $locale = null)
     {
         $this->locale = $locale;
-        $this->page   = $page;
-        $this->type   = get_class($page);
+        $this->entity = $entity;
+        $this->type = get_class($entity);
     }
+
+    /**
+     * Set entity data.
+     *
+     * @param null $default
+     */
     public function init($default = null)
     {
         $this->request = $default;
         $locale = $this->locale;
-        $entityItem = $this->page;
+        $entityItem = $this->entity;
         $type = $this->type;
 
         if (isset($locale)) {
@@ -39,23 +44,34 @@ class DynamicFields
             }
         }
     }
-    public function render($locale)
-    {
-        $htmlFields = $this->renderFields($locale);
-        $html = view('dynamicfield::admin.dynamicfield.fields', compact('locale', 'htmlFields'))->render();
 
-        return $html;
-    }
+    /**
+     * Render by locale.
+     *
+     * @param $locale
+     *
+     * @return mixed
+     */
     public function renderFields($locale)
     {
         $entity = $this->entities[$locale];
         if (isset($this->request)) {
             $entity->valid();
         }
+
         $html = $entity->render();
 
         return $html;
     }
+
+    /**
+     * Get field data.
+     *
+     * @param $fieldName
+     * @param string $locale
+     *
+     * @return string
+     */
     public function getFieldValue($fieldName, $locale = 'en')
     {
         $strValue = '';
@@ -70,6 +86,14 @@ class DynamicFields
 
         return $strValue;
     }
+
+    /**
+     * Get list fields data.
+     *
+     * @param string $locale
+     *
+     * @return mixed
+     */
     public function getFieldValues($locale = 'en')
     {
         $entity = $this->entities[$locale];
@@ -77,6 +101,12 @@ class DynamicFields
 
         return $values;
     }
+
+    /**
+     * Check valid entity.
+     *
+     * @return bool
+     */
     public function valid()
     {
         $isValid = true;
@@ -90,6 +120,12 @@ class DynamicFields
 
         return $isValid;
     }
+
+    /**
+     * Save field data.
+     *
+     * @return bool
+     */
     public function save()
     {
         $isSave = true;

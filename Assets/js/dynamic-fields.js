@@ -25,6 +25,20 @@ var DynamicFields = {
 				});
 
 	    },
+		// fixing ajax editor when change template
+		refreshEditor:function(editor_class){
+			$(editor_class + " .ckeditor").each(function(i){
+				var name = $(this).attr('name');
+				var id = $(this).attr('id');
+				if($(this).hasClass('dynamic-editor')){
+					if(!$(this).closest('tr').hasClass('repeater-template')) {
+						CKEDITOR.replace(id, dynamicEditorConfig);
+					}
+				}else{
+					 CKEDITOR.replace(name);
+				}
+			});
+		},
 	    renderProcess:function(template){
 				var reqData = "id="+this.pageId + "&"+"template="+template + "&"+ "entity_type=" + this.entityType;
 				jQuery.ajax( {
@@ -42,11 +56,8 @@ var DynamicFields = {
 								var htmlContent  = eval("data.html." + lang);
 								$(id).html(htmlContent);
 								/********************************/
-									var editor_class = id  + ' .form-group .ckeditor' ;
-									$(editor_class).each(function(i){
-											 var name = $(this).attr('name');
-											 CKEDITOR.replace(name);
-									});
+									var editor_class = id  ;
+									DynamicFields.refreshEditor(editor_class);
 								/********************************/
 							}
 							

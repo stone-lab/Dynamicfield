@@ -6,6 +6,6 @@ use Modules\Dynamicfield\Utility\Enum\BasicEnum;
 
 abstract class Parameter extends BasicEnum
 {
-    const TYPE      = 'Post Type';
+    const TYPE      = 'Module';
     const TEMPLATE  = 'Page Template';
 }

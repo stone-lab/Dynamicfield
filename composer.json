@@ -1,5 +1,5 @@
 {
-	"name": "stonelab/dynamicfield",
+	"name": "stonelab/Dynamicfield",
 	"description": "",
     "type": "asgard-module",
     "require": {
@@ -11,12 +11,6 @@
         "phpunit/phpunit": "~4.0",
         "orchestra/testbench": "~3.1"
     },
-    "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/nWidart/modules"
-    }
-    ],
     "autoload-dev": {
         "psr-4": {
             "Modules\\Dynamicfield\\": ".",

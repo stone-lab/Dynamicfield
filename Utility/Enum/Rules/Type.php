@@ -7,5 +7,5 @@ use Modules\Dynamicfield\Utility\Enum\BasicEnum;
 abstract class Type extends BasicEnum
 {
     const PAGE  = 'Page';
-    const POST  = 'Post';
+    const BLOG  = 'Blog';
 }
