@@ -18,6 +18,7 @@ class Repeater extends FieldBase
     protected $locale;
     protected $repeaterHeaders;
     protected $order;
+    protected $repeaterFieldData;
     protected $isValid = true;
     protected $htmlItemTemplate = '<tr>%s</tr>';
 
@@ -32,30 +33,38 @@ class Repeater extends FieldBase
         $this->initRepeatFields($this->field, $default);
     }
 
-    //init data per group
+    /**
+     * Set data per group.
+     *
+     * @param $fieldInfo
+     * @param null $default
+     */
     private function initRepeatFields($fieldInfo, $default = null)
     {
         $controls = array();
         $repeaterId = $fieldInfo->id;
         $entity = Entity::getEntity($this->entityId, $this->entityType, $repeaterId);
-        $repeaters = $entity->getRepeatersByLocale($this->locale);
-
+        $repeaters = Entity::getAllDataTranactionRepeater($this->entityId, $this->entityType, $repeaterId, $this->locale);
+        $this->repeaterFieldData = Entity::getAllDataTranactionRepeaterFields($this->entityId, $this->entityType, $repeaterId, $this->locale);
         $post_data = @$default['value'];
         $this->defaultOrder = @$default['order'];
+        $repeater_field = $this->field;
+        $fieldOfRepeater = $repeater_field->getListFields();
         if (isset($post_data)) {
             unset($post_data['clone']);
             $this->deleteItems = $default['delete'];
 
             foreach ($post_data as $k => $control) {
                 $listDefault = $post_data[$k];
-                $controls[$k]['fields'] = $this->createListControlAfterPostData($k, $listDefault);
+                $controls[$k]['fields'] = $this->createListControlAfterPostData($k, $listDefault, $fieldOfRepeater);
                 $controls[$k]['order'] = -1;
             }
         } else {
-            if ($repeaters->count()) {
+            if (count($repeaters)) {
                 $i = 1;
+
                 foreach ($repeaters as $repeater) {
-                    $controls[$repeater->id]['fields'] = $this->createListControl($repeater);
+                    $controls[$repeater->id]['fields'] = $this->createListControl($repeater, $fieldOfRepeater);
                     $controls[$repeater->id]['order'] = $i;
                     ++$i;
                 }
@@ -64,21 +73,25 @@ class Repeater extends FieldBase
 
         $this->groupFields = $controls;
 
-        $this->repeaterHeaders = $this->createHeaderRepeater();
+        $this->repeaterHeaders = $this->createHeaderRepeater($fieldOfRepeater);
     }
 
-    // create list controller when user post data from browser
-
-    private function createListControlAfterPostData($repeaterId, $default = null)
+    /**
+     * create list controller when user post data from browser.
+     *
+     * @param $repeaterId
+     * @param null $default
+     *
+     * @return array
+     */
+    private function createListControlAfterPostData($repeaterId, $default = null, $fieldOfRepeater)
     {
         $controls = array();
-        $repeaterField = $this->field;
         $nameFormat = '%s[fields]' . sprintf('[%s][value][%s]', $this->getFieldId(), $repeaterId) . '[%s][value]';
         $idFormat = '%s_' . sprintf('%s_%s_', $this->getFieldId(), $repeaterId) . '_%s_value';
-        $filedOfRepeater = $repeaterField->getListFields();
 
-        if ($filedOfRepeater->count()) {
-            foreach ($filedOfRepeater as $field) {
+        if ($fieldOfRepeater->count()) {
+            foreach ($fieldOfRepeater as $field) {
                 $listDefault = $default[$field->id];
                 $fieldControl = $this->createFieldControl($field, $repeaterId, $listDefault);
                 $fieldControl->setHtmlNameFormat($nameFormat);
@@ -90,22 +103,28 @@ class Repeater extends FieldBase
         return $controls;
     }
 
-    private function createListControl($repeater)
+    /**
+     * Set list control of repeater.
+     *
+     * @param $repeater
+     *
+     * @return mixed
+     */
+    private function createListControl($repeater, $fieldOfRepeater)
     {
-        $repeater_field = $this->field;
         $nameFormat = '%s[fields]' . sprintf('[%s][value][%s]', $this->getFieldId(), $repeater->id) . '[%s][value]';
         $idFormat = '%s_' . sprintf('%s_%s_', $this->getFieldId(), $repeater->id) . '_%s_value';
-        $filedOfRepeater = $repeater_field->getListFields();
 
-        if ($filedOfRepeater->count()) {
-            foreach ($filedOfRepeater as $field) {
+        if ($fieldOfRepeater->count()) {
+            foreach ($fieldOfRepeater as $field) {
+                $dbData = $this->getFieldDataInDB($field->id, $repeater->id);
                 $fieldControl = $this->createFieldControl($field, $repeater->id);
                 $fieldControl->setHtmlItemTemplate('%s');
                 $fieldControl->setHtmlNameFormat($nameFormat);
                 $fieldControl->setHtmlIdFormat($idFormat);
 
-                $value = $repeater->getFieldValue($field->id);
-                $fieldControl->setValue($value->value);
+               // $value = $repeater->getFieldValue($field->id);
+                $fieldControl->setValue($dbData);
 
                 $controls[$field->id] = $fieldControl;
             }
@@ -114,11 +133,19 @@ class Repeater extends FieldBase
         return $controls;
     }
 
+    /**
+     * Set field control data.
+     *
+     * @param $field
+     * @param $translateId
+     * @param null $default
+     *
+     * @return File|Image|Number|Text|Textarea|Wysiwyg|null
+     */
     private function createFieldControl($field, $translateId, $default = null)
     {
         $fieldControl = null;
         $fieldValue = $default;
-
         switch ($field->type) {
             case 'text':
                 $fieldControl = new Text($field, $this->entityId, $this->locale);
@@ -148,23 +175,39 @@ class Repeater extends FieldBase
 
         return $fieldControl;
     }
-    private function createHeaderRepeater()
+
+    /**
+     * Set header repeater.
+     *
+     * @return mixed
+     */
+    private function createHeaderRepeater($fieldOfRepeater)
     {
         $repeater = new RepeaterTranslation();
         //TODO Here was ='clone'
         $repeater->id = 'clone';
-        $controls = $this->createListControl($repeater);
+        $controls = $this->createListControl($repeater, $fieldOfRepeater);
 
         return $controls;
     }
-    // valid for group field
+
+    /**
+     * Valid for group field.
+     *
+     * @return bool
+     */
     public function valid()
     {
         $isValid = true;
 
         return $isValid;
     }
-    // render for group field
+
+    /**
+     * Render for group field.
+     *
+     * @return string
+     */
     public function render()
     {
         $htmlRepeaterTemplate = '';
@@ -258,7 +301,11 @@ class Repeater extends FieldBase
         return $html;
     }
 
-    // save field data to database ;
+    /**
+     * Save field data to database.
+     *
+     * @return bool
+     */
     public function save()
     {
         $bResult = false;
@@ -294,6 +341,11 @@ class Repeater extends FieldBase
         return $bResult;
     }
 
+    /**
+     * Show group field.
+     *
+     * @return array
+     */
     public function getDisplayValue()
     {
         $values = array();
@@ -315,6 +367,11 @@ class Repeater extends FieldBase
         return $values;
     }
 
+    /**
+     * Get error message.
+     *
+     * @return string
+     */
     public function getErrorMessage()
     {
         $error = $this->getOption('error_message');
@@ -322,6 +379,30 @@ class Repeater extends FieldBase
         return $error;
     }
 
+    public function getFieldDataInDB($fieldId, $translationId)
+    {
+        $fieldValue = "";
+        $index = -1;
+        foreach ($this->repeaterFieldData as $k=>$v) {
+            if ($v->translation_id == $translationId && $v->field_id == $fieldId) {
+                $fieldValue = $v->value;
+                $index = $k ;
+                break;
+            }
+        }
+        // remove item to improve performance
+        if ($index) {
+            unset($this->repeaterFieldData[$index]);
+        }
+
+        return $fieldValue;
+    }
+
+    /**
+     * Get order data.
+     *
+     * @return mixed
+     */
     protected function getOrder()
     {
         return $this->order;

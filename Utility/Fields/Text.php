@@ -6,11 +6,16 @@ use Collective\Html\FormFacade;
 
 class Text extends FieldBase
 {
-    public function __construct($fieldInfo, $entityId, $locale)
+    public function __construct($fieldInfo, $entityId, $locale, $dbData = null)
     {
-        parent:: __construct($fieldInfo, $entityId, $locale);
+        parent:: __construct($fieldInfo, $entityId, $locale, $dbData);
     }
 
+    /**
+     * Check validator with field.
+     *
+     * @return bool
+     */
     public function valid()
     {
         $bResult = false;
@@ -27,6 +32,12 @@ class Text extends FieldBase
 
         return $bResult;
     }
+
+    /**
+     * Render html of field.
+     *
+     * @return string
+     */
     public function render()
     {
         $attrs = array();
@@ -69,6 +80,11 @@ class Text extends FieldBase
         return $html;
     }
 
+    /**
+     * Get error message.
+     *
+     * @return string
+     */
     public function getErrorMessage()
     {
         $error = $this->getOption('error_message');

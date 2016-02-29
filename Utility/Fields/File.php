@@ -8,11 +8,14 @@ use Request;
 
 class File extends FieldBase
 {
+    /**
+     * @var file
+     */
     private $file;
 
-    public function __construct($fieldInfo, $entityId, $locale)
+    public function __construct($fieldInfo, $entityId, $locale, $dbData = null)
     {
-        parent:: __construct($fieldInfo, $entityId, $locale);
+        parent:: __construct($fieldInfo, $entityId, $locale, $dbData);
     }
     public function init($_default = null)
     {
@@ -33,6 +36,11 @@ class File extends FieldBase
         }
     }
 
+    /**
+     * Check validator with field.
+     *
+     * @return bool
+     */
     public function valid()
     {
         $bResult = false;
@@ -49,6 +57,12 @@ class File extends FieldBase
 
         return $bResult;
     }
+
+    /**
+     * Render html of field.
+     *
+     * @return string
+     */
     public function render()
     {
         $attrs = array();
@@ -85,6 +99,11 @@ class File extends FieldBase
         return $html;
     }
 
+    /**
+     * Get error message.
+     *
+     * @return string
+     */
     public function getErrorMessage()
     {
         $error = $this->getOption('error_message');
@@ -92,6 +111,11 @@ class File extends FieldBase
         return $error;
     }
 
+    /**
+     * Show data file when isset.
+     *
+     * @return string
+     */
     public function getDisplayValue()
     {
         $value = $this->value;
@@ -102,7 +126,9 @@ class File extends FieldBase
         return $value;
     }
 
-    /* override base method */
+    /**
+     * Override base method.
+     */
     public function save()
     {
         if (isset($this->file)) {
